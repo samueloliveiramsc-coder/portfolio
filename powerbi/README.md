@@ -106,11 +106,3 @@ As páginas 1 a 4 e 6 têm os filtros **Linha, Máquina, Período e Turno**, sin
 | `Tempo Mediano de Conferência (min)` | Do 1º feeder lido ao último confirmado. Conferências sem feeders ou acima de 1 h ficam de fora. |
 | `Bobinas com Saldo`, `Peças em Estoque`, `Bobinas Paradas` | Foto da última carga. Ignoram o filtro de período. "Parada" significa sem movimento há mais de 90 dias. |
 | `Dias até Montar` | Do recebimento até a primeira montagem em máquina, agrupado pelo mês de recebimento. |
-
-### Regenerar
-
-```powershell
-python powerbi\tools\gerar_pbip_metronome.py --servidor localhost --banco Metronome_DW
-```
-
-Como no outro relatório, **o gerador sobrescreve** o `.SemanticModel` e o `.Report`.

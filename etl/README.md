@@ -124,11 +124,3 @@ O relatório pronto está em [`powerbi/SFCS_Producao.pbip`](../powerbi/README.md
   ```
 
 - **Outras linhas**: mesmo pacote, trocando `MongoDatabase`. Rode as linhas **em sequência**, não em paralelo, porque as dimensões são compartilhadas.
-
-## Regenerar o pacote
-
-`tools/GerarPacote.ps1` recria `.sln`, `.dtproj`, `.dtsx`, `Project.params` e `.database`. Ele lê os metadados do Mongo e da staging, então os dois precisam estar acessíveis. **Isso sobrescreve alterações feitas no Visual Studio nesses arquivos.** Depois que o pacote passar a ser mantido pelo designer, deixe de usar o gerador.
-
-```powershell
-powershell -ExecutionPolicy Bypass -File etl\tools\GerarPacote.ps1 -MongoDatabase thread_05 -SqlServidor localhost
-```
