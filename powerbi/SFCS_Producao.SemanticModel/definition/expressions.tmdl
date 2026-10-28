@@ -1,0 +1,12 @@
+/// Servidor SQL Server com o banco SFCS_DW
+expression Servidor = "localhost" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 95d384d6-816b-5193-8c38-d6bc77bcf33d
+
+	annotation PBI_ResultType = Text
+
+/// Banco de destino do ETL
+expression Banco = "SFCS_DW" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: d690033d-62e0-5815-a184-ec3c3a02d75f
+
+	annotation PBI_ResultType = Text
+

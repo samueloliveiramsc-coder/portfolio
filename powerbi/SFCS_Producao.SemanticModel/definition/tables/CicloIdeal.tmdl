@@ -1,0 +1,53 @@
+/// Ciclo de referência (taxa demonstrada): percentil 10 dos segundos rodando por placa, por máquina e programa.
+table CicloIdeal
+	lineageTag: 4e52288c-a55a-507a-a1be-60660be5e311
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9ff9b377-ea50-5971-8ca3-abf938e3d097
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fd7f7926-4c4b-539d-9ce4-96cf5d2f8418
+		summarizeBy: none
+		sourceColumn: ProgramaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CicloIdealSeg
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 52250763-a727-5b53-9bc7-fe6763ce9c2e
+		summarizeBy: sum
+		sourceColumn: CicloIdealSeg
+
+		annotation SummarizationSetBy = Automatic
+
+	column HorasBase
+		dataType: int64
+		formatString: 0
+		lineageTag: d63fe79c-b94f-5f83-b2a0-aca7931a4e44
+		summarizeBy: none
+		sourceColumn: HorasBase
+
+		annotation SummarizationSetBy = Automatic
+
+	partition CicloIdeal = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "CicloIdeal"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

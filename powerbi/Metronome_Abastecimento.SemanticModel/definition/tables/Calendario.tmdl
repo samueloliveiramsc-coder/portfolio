@@ -1,0 +1,99 @@
+table Calendario
+	lineageTag: b4d341e4-f25d-55ab-9932-e2b0c4ab9288
+	dataCategory: Time
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: baecb062-3f90-59f2-b39b-d743b8befbba
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Data
+		dataType: dateTime
+		isKey
+		formatString: dd/MM/yyyy
+		lineageTag: 42ed3f1e-2a83-5973-b3a2-3c738ac2df1b
+		summarizeBy: none
+		sourceColumn: Data
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Ano
+		dataType: int64
+		formatString: 0
+		lineageTag: 5af338b7-6c14-5860-a80e-418c00c180e5
+		summarizeBy: none
+		sourceColumn: Ano
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		dataType: int64
+		formatString: 0
+		lineageTag: e5494f84-e7ad-598d-8933-a46a7c08de65
+		summarizeBy: none
+		sourceColumn: Mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column NomeMes
+		dataType: string
+		lineageTag: b097d5cd-66e1-55ce-907e-71a1859e2a5a
+		summarizeBy: none
+		sourceColumn: NomeMes
+		sortByColumn: Mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column AnoMes
+		dataType: string
+		lineageTag: 2cf51b2e-ed7d-539e-81dc-5d8b5390ad5f
+		summarizeBy: none
+		sourceColumn: AnoMes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Dia
+		dataType: int64
+		formatString: 0
+		lineageTag: 8847d123-9176-5e01-95c1-80a3167b073c
+		summarizeBy: none
+		sourceColumn: Dia
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiaSemana
+		dataType: int64
+		formatString: 0
+		lineageTag: a47c43da-3343-5279-b658-48c3ffb2ffc0
+		summarizeBy: none
+		sourceColumn: DiaSemana
+
+		annotation SummarizationSetBy = Automatic
+
+	column NomeDiaSemana
+		dataType: string
+		lineageTag: 9b06f633-311f-5a5c-bc54-4e351b43fd90
+		summarizeBy: none
+		sourceColumn: NomeDiaSemana
+		sortByColumn: DiaSemana
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendario = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Calendario"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,191 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "832f11ccf3bc6d324400",
+  "position": {
+    "x": 22.04081632653061,
+    "y": 816.88775510204073,
+    "z": 2,
+    "height": 231.42857142857142,
+    "width": 1423.0102040816325,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Samuel Oliveira",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Consolas",
+                      "fontSize": "40pt",
+                      "color": "#ffffff"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Especialista em Inteligência de Negócios | Desenvolvedor SQL | Power BI | MES | Pick & Place SMT/SMD",
+                    "textStyle": {
+                      "fontFamily": "Consolas",
+                      "fontSize": "18pt",
+                      "color": "#ffffff"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "LinkedIn: ",
+                    "textStyle": {
+                      "fontFamily": "Consolas",
+                      "fontSize": "18pt",
+                      "color": "#ffffff"
+                    }
+                  },
+                  {
+                    "value": "https://www.linkedin.com/in/samuel-oliveira-msc/",
+                    "textStyle": {
+                      "fontFamily": "Consolas",
+                      "fontSize": "18pt",
+                      "color": "#ffffff"
+                    },
+                    "url": "https://www.linkedin.com/in/samuel-oliveira-msc/"
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "E-mail: ",
+                    "textStyle": {
+                      "fontFamily": "Consolas",
+                      "fontSize": "18pt",
+                      "color": "#ffffff"
+                    }
+                  },
+                  {
+                    "value": "samueloliveira.msc@gmail.com",
+                    "textStyle": {
+                      "fontFamily": "Consolas",
+                      "fontSize": "18pt",
+                      "color": "#ffffff"
+                    },
+                    "url": "mailto:samueloliveira.msc@gmail.com"
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Fone: +55 19 98456-0024",
+                    "textStyle": {
+                      "fontFamily": "Consolas",
+                      "fontSize": "18pt",
+                      "color": "#ffffff"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Hortolândia/SP, Brasil",
+                    "textStyle": {
+                      "fontFamily": "Consolas",
+                      "fontSize": "18pt",
+                      "color": "#ffffff"
+                    }
+                  }
+                ],
+                "listType": "bullet"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "padding": [
+        {
+          "properties": {
+            "left": {
+              "expr": {
+                "Literal": {
+                  "Value": "15D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#550B0B'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "28D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "shadowSpread": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 9,
+                      "Percent": -0.5
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

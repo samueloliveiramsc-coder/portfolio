@@ -1,0 +1,156 @@
+/// Falhas das máquinas KE: leituras consecutivas com TimeTrouble ou TimeRepair. Paradas menores que o intervalo de coleta não aparecem.
+table FalhaMaquina
+	lineageTag: 4f63f4ef-2ffb-51b8-9ac9-339fbf8ac2fb
+
+	/// Paradas por falha/reparo a partir de FALHA_MIN_MINUTOS (padrão 5 min), pela data de início.
+	measure Falhas = CALCULATE ( COUNTROWS ( FalhaMaquina ), FalhaMaquina[Tipo] = "Falha" )
+		formatString: #,0
+		displayFolder: Confiabilidade
+		lineageTag: 59668f1b-2546-5c3a-a4db-1e8327a11a8b
+
+	/// Paradas por falha/reparo mais curtas que FALHA_MIN_MINUTOS: perda de desempenho, fora do MTBF/MTTR.
+	measure Microparadas = CALCULATE ( COUNTROWS ( FalhaMaquina ), FalhaMaquina[Tipo] = "Microparada" )
+		formatString: #,0
+		displayFolder: Confiabilidade
+		lineageTag: 43824483-9630-57db-b529-c58a2aad533d
+
+	measure 'Tempo em Falha (h)' = DIVIDE ( CALCULATE ( SUM ( FalhaMaquina[MinutosParada] ), FalhaMaquina[Tipo] = "Falha" ), 60 )
+		formatString: #,0.0
+		displayFolder: Confiabilidade
+		lineageTag: 71b98b3e-a130-55d2-80db-cc9434817129
+
+	/// Horas rodando ÷ falhas. Em branco quando não houve falha no período; precisa de semanas de histórico para ser estável.
+	measure 'MTBF (h)' = DIVIDE ( [Horas Rodando], [Falhas] )
+		formatString: #,0.0
+		displayFolder: Confiabilidade
+		lineageTag: b5a9b43d-9773-5677-bcb4-e4e19738089d
+
+	/// Minutos parados por falha ÷ falhas. Inclui a espera pelo técnico (a origem não separa espera de reparo).
+	measure 'MTTR (min)' = DIVIDE ( [Tempo em Falha (h)] * 60, [Falhas] )
+		formatString: #,0.0
+		displayFolder: Confiabilidade
+		lineageTag: 4b205a2c-edf1-56c8-b2a2-862d673856bd
+
+	column FalhaId
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 36058ed6-0254-55e8-8013-aa0d36446301
+		summarizeBy: none
+		sourceColumn: FalhaId
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tipo
+		dataType: string
+		lineageTag: 8f365d42-77f5-5ee5-b1ed-a124b15b8516
+		summarizeBy: none
+		sourceColumn: Tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4057f43e-ce57-592b-94ed-2db400f2ba27
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cf4adb74-34d3-5c53-818b-f8ddc7764fd4
+		summarizeBy: none
+		sourceColumn: ProgramaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2eb109ce-199a-59b3-8ed6-bbf6a0219c0b
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Inicio
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: 9b294d05-331c-5b19-81c2-442720ec0fe5
+		summarizeBy: none
+		sourceColumn: Inicio
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fim
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: 6312cea3-1c67-5ce4-89b2-46bdcf33fb3a
+		summarizeBy: none
+		sourceColumn: Fim
+
+		annotation SummarizationSetBy = Automatic
+
+	column Leituras
+		dataType: int64
+		formatString: 0
+		lineageTag: ce4928da-abc2-5fcf-94fa-045934ce10c9
+		summarizeBy: none
+		sourceColumn: Leituras
+
+		annotation SummarizationSetBy = Automatic
+
+	column MinutosParada
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 20834ee1-09d8-514a-8be1-268cff71d933
+		summarizeBy: sum
+		sourceColumn: MinutosParada
+
+		annotation SummarizationSetBy = Automatic
+
+	column MinutosFalha
+		dataType: double
+		formatString: #,0.0
+		lineageTag: fdb2b668-f4c3-54d2-a37e-f898a8fd9838
+		summarizeBy: sum
+		sourceColumn: MinutosFalha
+
+		annotation SummarizationSetBy = Automatic
+
+	column MinutosReparo
+		dataType: double
+		formatString: #,0.0
+		lineageTag: db2a44da-f400-5087-8b72-68aaf9b97925
+		summarizeBy: sum
+		sourceColumn: MinutosReparo
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 675b97d0-7fd2-5c72-bb7e-5cccdd95198f
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	partition FalhaMaquina = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "FalhaMaquina"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,376 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "interlock_12",
+  "position": {
+    "x": 248,
+    "y": 635,
+    "z": 21000,
+    "height": 437,
+    "width": 1019.0769230769232,
+    "tabOrder": 21000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Maquina"
+                    }
+                  },
+                  "Property": "LinhaMaquina"
+                }
+              },
+              "queryRef": "Maquina.LinhaMaquina",
+              "nativeQueryRef": "LinhaMaquina"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EventoMaquina"
+                    }
+                  },
+                  "Property": "Verificações"
+                }
+              },
+              "queryRef": "EventoMaquina.Verificações",
+              "nativeQueryRef": "Verificações"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EventoMaquina"
+                    }
+                  },
+                  "Property": "Bloqueios"
+                }
+              },
+              "queryRef": "EventoMaquina.Bloqueios",
+              "nativeQueryRef": "Bloqueios"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EventoMaquina"
+                    }
+                  },
+                  "Property": "Taxa de Bloqueio %"
+                }
+              },
+              "queryRef": "EventoMaquina.Taxa de Bloqueio %",
+              "nativeQueryRef": "Taxa de Bloqueio %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EventoMaquina"
+                    }
+                  },
+                  "Property": "Splicings"
+                }
+              },
+              "queryRef": "EventoMaquina.Splicings",
+              "nativeQueryRef": "Splicings"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EventoMaquina"
+                    }
+                  },
+                  "Property": "Descargas Forçadas"
+                }
+              },
+              "queryRef": "EventoMaquina.Descargas Forçadas",
+              "nativeQueryRef": "Descargas Forçadas"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "EventoMaquina"
+                  }
+                },
+                "Property": "Bloqueios"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E3E6EA'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Interlock por máquina'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "16D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2A37'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "668793d22860b30fefd0",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Maquina"
+              }
+            },
+            "Property": "LinhaMaquina"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "acdd6b67eaf4754f3e81",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "EventoMaquina"
+              }
+            },
+            "Property": "Verificações"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "0e11b4b7fd5ebc9fead3",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "EventoMaquina"
+              }
+            },
+            "Property": "Bloqueios"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "1eed304c6f09dbdf7e99",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "EventoMaquina"
+              }
+            },
+            "Property": "Taxa de Bloqueio %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "2dc98ed75e5b18aa1c1c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "EventoMaquina"
+              }
+            },
+            "Property": "Splicings"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "19596b977f2104e55e0d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "EventoMaquina"
+              }
+            },
+            "Property": "Descargas Forçadas"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

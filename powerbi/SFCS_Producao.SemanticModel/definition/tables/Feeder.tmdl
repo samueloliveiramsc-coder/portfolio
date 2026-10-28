@@ -1,0 +1,142 @@
+/// Pick/perda por feeder, agregado por hora.
+table Feeder
+	lineageTag: 50f33b7f-43fb-541f-8517-6554bcb910b8
+
+	measure 'Picked (feeders)' = SUM ( Feeder[Picked] )
+		formatString: #,0
+		displayFolder: Perdas
+		lineageTag: 86cfb577-de37-5af7-b6f3-c19a14ac99cd
+
+	measure 'Missed (feeders)' = SUM ( Feeder[Missed] )
+		formatString: #,0
+		displayFolder: Perdas
+		lineageTag: a16177c9-433e-590a-950b-aeb0723e28fb
+
+	/// Missed ÷ Picked nos feeders.
+	measure 'Taxa de Perda %' = DIVIDE ( [Missed (feeders)], [Picked (feeders)] )
+		formatString: 0.00%
+		displayFolder: Perdas
+		lineageTag: fccfb8b8-421c-5f85-86ff-30f92148f4d9
+
+	/// Perdas por milhão de picks.
+	measure 'Perdas PPM' = [Taxa de Perda %] * 1000000
+		formatString: #,0
+		displayFolder: Perdas
+		lineageTag: 7050f185-5c41-521b-970c-d39923e9c3cf
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9d778286-28c6-509a-826c-3c6a7762a009
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 97bd6580-4935-5e67-a188-0eb361208c70
+		summarizeBy: none
+		sourceColumn: ProgramaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ComponenteKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 27b72bfd-ce95-5dad-977d-00e38b41a82f
+		summarizeBy: none
+		sourceColumn: ComponenteKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b0de34a7-28ae-5421-acbd-feb5131e7151
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 947b8452-ecfe-5a9d-a714-465d3f639aa7
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Lado
+		dataType: string
+		lineageTag: 622dd20e-179f-5af4-af55-8b3a31451050
+		summarizeBy: none
+		sourceColumn: Lado
+
+		annotation SummarizationSetBy = Automatic
+
+	column FeederPos
+		dataType: int64
+		formatString: 0
+		lineageTag: 367e11c0-9090-54f1-b017-293834f1fcf5
+		summarizeBy: none
+		sourceColumn: FeederPos
+
+		annotation SummarizationSetBy = Automatic
+
+	column Feeder
+		dataType: string
+		lineageTag: fc4154a7-a5c4-50c3-975c-bf2bb70f8ced
+		summarizeBy: none
+		sourceColumn: Feeder
+
+		annotation SummarizationSetBy = Automatic
+
+	column Picked
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8022c1b1-2f17-5485-b0f0-16550af859a7
+		summarizeBy: none
+		sourceColumn: Picked
+
+		annotation SummarizationSetBy = Automatic
+
+	column Placed
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d12645c9-ed1a-59a2-8d19-6db9ed9c4369
+		summarizeBy: none
+		sourceColumn: Placed
+
+		annotation SummarizationSetBy = Automatic
+
+	column Missed
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9ae53869-aad6-53ef-ab96-7574f98f626b
+		summarizeBy: none
+		sourceColumn: Missed
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Feeder = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Feeder"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

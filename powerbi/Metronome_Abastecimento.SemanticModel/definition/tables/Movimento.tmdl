@@ -1,0 +1,99 @@
+/// Movimentos de bobinas por hora, destino e operador.
+table Movimento
+	lineageTag: 0862d054-a8bb-5d55-81b6-0fb4c17aa168
+
+	measure Movimentos = SUM ( Movimento[QtdMovimentos] )
+		formatString: #,0
+		displayFolder: Movimentos
+		lineageTag: fbb98741-3df4-5bfd-afda-86cfe81536c1
+
+	/// Mesma bobina e destino em menos de 60 s (leitura duplicada).
+	measure 'Movimentos Repetidos' = SUM ( Movimento[QtdRepetidos] )
+		formatString: #,0
+		displayFolder: Movimentos
+		lineageTag: 0af202cb-61e0-583f-90fc-db9560b054e3
+
+	measure '% Movimentos Repetidos' = DIVIDE ( [Movimentos Repetidos], [Movimentos] )
+		formatString: 0.0%
+		displayFolder: Movimentos
+		lineageTag: b9ce68a2-53e3-5b1a-a402-124f1dd16d09
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 37457c5b-c1fd-5588-8073-7e5a70602107
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9b7dc965-6a83-5f22-ad59-09c6f32ccc2e
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6d6656f5-1a58-5edf-8231-67b4b683d9c0
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column OperadorKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e85b5e35-adea-554e-887e-b108b031af06
+		summarizeBy: none
+		sourceColumn: OperadorKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column TipoDestino
+		dataType: string
+		lineageTag: f3e4b85e-21bd-542f-8a6a-5b3b4ef1b06f
+		summarizeBy: none
+		sourceColumn: TipoDestino
+
+		annotation SummarizationSetBy = Automatic
+
+	column QtdMovimentos
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 937b7fd8-42bb-54b6-a4c9-0df9a578bf80
+		summarizeBy: none
+		sourceColumn: QtdMovimentos
+
+		annotation SummarizationSetBy = Automatic
+
+	column QtdRepetidos
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3a0918d4-d765-55a8-96e0-deda79173bd7
+		summarizeBy: none
+		sourceColumn: QtdRepetidos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Movimento = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Movimento"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

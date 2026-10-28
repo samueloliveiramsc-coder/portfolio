@@ -1,0 +1,5 @@
+SFCS_ETL/bin/
+SFCS_ETL/obj/
+*.dtproj.user
+*.suo
+.vs/

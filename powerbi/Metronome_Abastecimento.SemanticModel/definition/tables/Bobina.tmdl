@@ -1,0 +1,239 @@
+/// Foto atual de cada bobina: saldo, local, dias sem movimento. A data é a de recebimento.
+table Bobina
+	lineageTag: e522fe65-e01e-5634-8a5e-db06ea47b7d4
+
+	/// Foto atual: não depende do período.
+	measure 'Bobinas com Saldo' = CALCULATE ( COUNTROWS ( Bobina ), Bobina[Situacao] = "Com saldo", REMOVEFILTERS ( Calendario ) )
+		formatString: #,0
+		displayFolder: Estoque
+		lineageTag: 1fc73d91-8499-5460-9a8a-adfc53ea5c6f
+
+	/// Foto atual: não depende do período.
+	measure 'Peças em Estoque' = CALCULATE ( SUM ( Bobina[Saldo] ), Bobina[Situacao] = "Com saldo", REMOVEFILTERS ( Calendario ) )
+		formatString: #,0
+		displayFolder: Estoque
+		lineageTag: 2601dad0-6c18-5f5c-bfcc-83b83315e3ef
+
+	/// Com saldo e sem movimento há mais de PARADA_DIAS (padrão 90) em relação à data de corte.
+	measure 'Bobinas Paradas' = CALCULATE ( COUNTROWS ( Bobina ), Bobina[Situacao] = "Com saldo", REMOVEFILTERS ( Calendario ), Bobina[Parada] = 1 )
+		formatString: #,0
+		displayFolder: Estoque
+		lineageTag: 0cfc25a8-de6f-549c-a85a-b496f0e333fc
+
+	measure '% Bobinas Paradas' = DIVIDE ( [Bobinas Paradas], [Bobinas com Saldo] )
+		formatString: 0.0%
+		displayFolder: Estoque
+		lineageTag: 20fafc38-9e8e-560e-a936-10f616647fa0
+
+	/// Pela data de recebimento.
+	measure 'Bobinas Recebidas' = COUNTROWS ( Bobina )
+		formatString: #,0
+		displayFolder: Estoque
+		lineageTag: 99224aee-f889-5e5d-b11b-95d691abc79f
+
+	/// Recebimento até a primeira montagem em máquina, pela data de recebimento.
+	measure 'Dias até Montar (mediana)' = MEDIAN ( Bobina[DiasAteMontar] )
+		formatString: #,0.0
+		displayFolder: Estoque
+		lineageTag: fe09faa0-bda5-52ee-8d9e-c2d4384d331e
+
+	measure 'Dias até Montar (média)' = AVERAGE ( Bobina[DiasAteMontar] )
+		formatString: #,0.0
+		displayFolder: Estoque
+		lineageTag: 8e0682cf-298d-5631-8d62-f05699b6424c
+
+	column BobinaId
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f58b3e80-ec9d-58bd-b1d5-7726c2b3aff1
+		summarizeBy: none
+		sourceColumn: BobinaId
+
+		annotation SummarizationSetBy = Automatic
+
+	column CodigoBobina
+		dataType: string
+		lineageTag: a44a7da4-8f58-56d0-95c4-8f03b0951349
+		summarizeBy: none
+		sourceColumn: CodigoBobina
+
+		annotation SummarizationSetBy = Automatic
+
+	column ComponenteKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b90fdde4-28ae-5598-b169-34c55989b187
+		summarizeBy: none
+		sourceColumn: ComponenteKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4965be31-8a6e-5226-ad2a-879bde7c9935
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9910b0ca-7aaf-5308-a525-d689f4a94127
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Recebimento
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: e98df71f-55f4-5ae6-889e-ebd06c257c0c
+		summarizeBy: none
+		sourceColumn: Recebimento
+
+		annotation SummarizationSetBy = Automatic
+
+	column Embalagem
+		dataType: int64
+		formatString: #,0
+		lineageTag: 3e2f8812-e09e-5a07-ac6b-9e159662dd17
+		summarizeBy: none
+		sourceColumn: Embalagem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Saldo
+		dataType: int64
+		formatString: #,0
+		lineageTag: 89144e1e-1e8c-533f-bb6b-b08cd420e53b
+		summarizeBy: none
+		sourceColumn: Saldo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Situacao
+		dataType: string
+		lineageTag: 90e8b802-c378-53b6-8150-47ab2a6915a0
+		summarizeBy: none
+		sourceColumn: Situacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column UltimoMovimento
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: 40632285-6359-58aa-94f4-3c7d7404a6d1
+		summarizeBy: none
+		sourceColumn: UltimoMovimento
+
+		annotation SummarizationSetBy = Automatic
+
+	column TipoLocal
+		dataType: string
+		lineageTag: bc5fd25a-abc0-5006-a4b8-b3dc8547ef51
+		summarizeBy: none
+		sourceColumn: TipoLocal
+
+		annotation SummarizationSetBy = Automatic
+
+	column LocalAtual
+		dataType: string
+		lineageTag: 983961f8-6255-5dda-83aa-8b11ec59ac0e
+		summarizeBy: none
+		sourceColumn: LocalAtual
+
+		annotation SummarizationSetBy = Automatic
+
+	column PrimeiraMontagem
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: 77d268f4-1efb-53fe-bbd2-59977eb0cff6
+		summarizeBy: none
+		sourceColumn: PrimeiraMontagem
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiasAteMontar
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 2e0bde01-6e3a-583e-bdb1-8c04ba13d736
+		summarizeBy: sum
+		sourceColumn: DiasAteMontar
+
+		annotation SummarizationSetBy = Automatic
+
+	column DiasSemMovimento
+		dataType: int64
+		formatString: 0
+		lineageTag: 816329e9-0b1a-55ad-82e1-90b3fa17c7aa
+		summarizeBy: none
+		sourceColumn: DiasSemMovimento
+
+		annotation SummarizationSetBy = Automatic
+
+	column FaixaAging
+		dataType: string
+		lineageTag: 40666d40-8405-5fb5-8abf-dfa278beb389
+		summarizeBy: none
+		sourceColumn: FaixaAging
+		sortByColumn: FaixaAgingOrdem
+
+		annotation SummarizationSetBy = Automatic
+
+	column FaixaAgingOrdem
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6312e36b-3bbf-591b-90bf-f477f8fbe4ef
+		summarizeBy: none
+		sourceColumn: FaixaAgingOrdem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Parada
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: aed978f4-dcce-5bbd-b67b-90cade4ce91e
+		summarizeBy: none
+		sourceColumn: Parada
+
+		annotation SummarizationSetBy = Automatic
+
+	column QtdMovimentos
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a1b8f281-5fdf-5f7b-a6c2-f270aecb64a0
+		summarizeBy: none
+		sourceColumn: QtdMovimentos
+
+		annotation SummarizationSetBy = Automatic
+
+	column QtdRepetidos
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ab2c237d-5e35-5d7a-8f66-2874c9034f22
+		summarizeBy: none
+		sourceColumn: QtdRepetidos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Bobina = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Bobina"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

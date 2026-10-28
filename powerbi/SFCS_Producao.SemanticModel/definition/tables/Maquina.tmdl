@@ -1,0 +1,89 @@
+/// Máquinas SMT por linha (thread_NN).
+table Maquina
+	lineageTag: f996292d-4a33-5587-a9db-6acc8b84dff0
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c530695b-4ccf-509e-bf61-bb8779cb88ae
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Linha
+		dataType: string
+		lineageTag: 90a9805c-a311-52b7-bb94-e7bc855a9fed
+		summarizeBy: none
+		sourceColumn: Linha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Thread
+		dataType: string
+		lineageTag: 4d45ea0d-74ba-5238-abe1-4e6258794c81
+		summarizeBy: none
+		sourceColumn: Thread
+
+		annotation SummarizationSetBy = Automatic
+
+	column Modulo
+		dataType: string
+		lineageTag: 62b02d5a-4427-5ba9-85f5-279351901ef5
+		summarizeBy: none
+		sourceColumn: Modulo
+
+		annotation SummarizationSetBy = Automatic
+
+	column LinhaModulo
+		dataType: string
+		lineageTag: 1ea52e39-93d7-51d6-bbdd-6638bf9828cd
+		summarizeBy: none
+		sourceColumn: LinhaModulo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Familia
+		dataType: string
+		lineageTag: 6d7d8a27-7e57-545f-bf4a-d492e7116304
+		summarizeBy: none
+		sourceColumn: Familia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Modelo
+		dataType: string
+		lineageTag: 7aa1ccf7-4e86-5945-b07c-4d245a205194
+		summarizeBy: none
+		sourceColumn: Modelo
+
+		annotation SummarizationSetBy = Automatic
+
+	column IpModulo
+		dataType: string
+		lineageTag: 6866c7c8-28cd-5f29-a091-f844e5d9d0f7
+		summarizeBy: none
+		sourceColumn: IpModulo
+
+		annotation SummarizationSetBy = Automatic
+
+	column InformaTempos
+		dataType: string
+		lineageTag: 5df01182-0779-5f34-b6ba-d631ce89cfe2
+		summarizeBy: none
+		sourceColumn: InformaTempos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Maquina = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Maquina"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

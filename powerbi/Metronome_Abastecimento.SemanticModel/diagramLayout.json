@@ -1,0 +1,191 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 75
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1470.8717454956434,
+            "y": 650.09490335731471
+          },
+          "nodeIndex": "Bobina",
+          "nodeLineageTag": "e522fe65-e01e-5634-8a5e-db06ea47b7d4",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 897.77480760825017,
+            "y": 711.00880506997783
+          },
+          "nodeIndex": "Calendario",
+          "nodeLineageTag": "b4d341e4-f25d-55ab-9932-e2b0c4ab9288",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 1578.0892671140014,
+            "y": 396.86939036876424
+          },
+          "nodeIndex": "Componente",
+          "nodeLineageTag": "6acf11fc-e4a0-503b-bba0-9fa115f8a8ff",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 1096.7074236666285,
+            "y": 357.3547350292115
+          },
+          "nodeIndex": "Consumo",
+          "nodeLineageTag": "4da74300-2b6c-526b-8370-4f6ed0bfd2c6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 337.11794909943183,
+            "y": 14.943875358286732
+          },
+          "nodeIndex": "EventoMaquina",
+          "nodeLineageTag": "90841a83-98e7-5946-88c6-8b0d7c3d5e4a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 624.71437014289336,
+            "y": 157.72780325345184
+          },
+          "nodeIndex": "Hora",
+          "nodeLineageTag": "7807e8f3-40e5-5aab-a09c-84e280bf12fb",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 1075.0438666420762,
+            "y": 1324.9221000221639
+          },
+          "nodeIndex": "Maquina",
+          "nodeLineageTag": "42d49aa0-fc2e-5267-b33d-c190b184552f",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 624.06514949729262,
+            "y": 359.89549531220757
+          },
+          "nodeIndex": "Movimento",
+          "nodeLineageTag": "0862d054-a8bb-5d55-81b6-0fb4c17aa168",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 337.08932526851731,
+            "y": 645.85568125730424
+          },
+          "nodeIndex": "Operador",
+          "nodeLineageTag": "a63a9002-bbfc-578b-bbf6-ebe3dbc5e858",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 13
+        },
+        {
+          "location": {
+            "x": 562.65439863978986,
+            "y": 850.29113952952468
+          },
+          "nodeIndex": "Programa",
+          "nodeLineageTag": "ab75bf13-29a1-564c-a4fa-ac681854f866",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 9
+        },
+        {
+          "location": {
+            "x": 1812.089267114002,
+            "y": 663.46105001108185
+          },
+          "nodeIndex": "QualidadeDados",
+          "nodeLineageTag": "33205c6f-62da-5fa1-a90e-a5fbfafcec24",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 10
+        },
+        {
+          "location": {
+            "x": 1183.7430338205861,
+            "y": 973.64278205290975
+          },
+          "nodeIndex": "Setup",
+          "nodeLineageTag": "68f799cf-ed7d-5c98-940c-d290f47fbde7",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 11
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": -50
+          },
+          "nodeIndex": "TipoEvento",
+          "nodeLineageTag": "011bdda9-cfd1-515e-8f42-9da2fe3a583f",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 12
+        }
+      ],
+      "name": "Todas as tabelas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas as tabelas",
+  "defaultDiagram": "Todas as tabelas"
+}

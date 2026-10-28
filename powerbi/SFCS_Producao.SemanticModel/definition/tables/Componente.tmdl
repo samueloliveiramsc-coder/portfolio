@@ -1,0 +1,32 @@
+table Componente
+	lineageTag: b8901453-c53f-541f-9835-800e282cf748
+
+	column ComponenteKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 72bf2262-3b34-59ac-9cc5-f9e9f67773cb
+		summarizeBy: none
+		sourceColumn: ComponenteKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Componente
+		dataType: string
+		lineageTag: 2fb5af3b-afb8-5213-ba34-e6f7f948307a
+		summarizeBy: none
+		sourceColumn: Componente
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Componente = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Componente"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

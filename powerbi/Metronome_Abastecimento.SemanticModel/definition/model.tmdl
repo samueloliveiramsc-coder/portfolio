@@ -1,0 +1,29 @@
+model Model
+	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Servidor", "Banco", "Maquina", "Componente", "Programa", "Operador", "Calendario", "Hora", "TipoEvento", "EventoMaquina", "Setup", "Consumo", "Bobina", "Movimento", "QualidadeDados"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Maquina
+ref table Componente
+ref table Programa
+ref table Operador
+ref table Calendario
+ref table Hora
+ref table TipoEvento
+ref table EventoMaquina
+ref table Setup
+ref table Consumo
+ref table Bobina
+ref table Movimento
+ref table QualidadeDados
+

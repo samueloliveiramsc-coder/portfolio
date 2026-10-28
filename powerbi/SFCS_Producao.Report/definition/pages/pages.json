@@ -1,0 +1,14 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.1.0/schema.json",
+  "pageOrder": [
+    "396860459c6b9919ff97",
+    "visaoGeral",
+    "producao",
+    "perdas",
+    "disponibilidade",
+    "trocas",
+    "coleta",
+    "confiabilidade"
+  ],
+  "activePageName": "396860459c6b9919ff97"
+}

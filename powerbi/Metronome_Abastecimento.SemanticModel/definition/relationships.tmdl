@@ -1,0 +1,84 @@
+relationship 1b9209d5-a2d2-531e-baf9-f84cd24c0a12
+	fromColumn: EventoMaquina.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship 56ee6e0d-5048-5d89-b740-b47e1121b5de
+	fromColumn: EventoMaquina.OperadorKey
+	toColumn: Operador.OperadorKey
+
+relationship e308f02d-5579-5090-ac76-2a447216ea5d
+	fromColumn: EventoMaquina.TipoCodigo
+	toColumn: TipoEvento.TipoCodigo
+
+relationship 59071b51-58bf-56e3-b264-2e9afd5dd3a5
+	fromColumn: EventoMaquina.DataKey
+	toColumn: Calendario.DataKey
+
+relationship 218d947f-dde9-5e23-abc3-d53c048fdd3b
+	fromColumn: EventoMaquina.HoraKey
+	toColumn: Hora.HoraKey
+
+relationship a9536417-5b19-5f1d-9603-5d245d229025
+	fromColumn: Setup.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship 82b7454f-503e-58a0-9b8d-6ad396b19304
+	fromColumn: Setup.ProgramaKey
+	toColumn: Programa.ProgramaKey
+
+relationship d84d5c81-4d05-5298-97b4-a55187fcef98
+	fromColumn: Setup.OperadorKey
+	toColumn: Operador.OperadorKey
+
+relationship 35e253a1-72a8-55ae-ab07-f14dc32edaed
+	fromColumn: Setup.DataKey
+	toColumn: Calendario.DataKey
+
+relationship 258f20f1-6e95-5860-a890-13c1bc809745
+	fromColumn: Setup.HoraKey
+	toColumn: Hora.HoraKey
+
+relationship 18eef46f-f51b-5d74-adb9-1583eb28d2c2
+	fromColumn: Consumo.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship 57e8db9a-442c-5c18-ba89-c66d471aea3e
+	fromColumn: Consumo.ComponenteKey
+	toColumn: Componente.ComponenteKey
+
+relationship 928e1229-dd8a-5c27-9194-db98710bd31c
+	fromColumn: Consumo.DataKey
+	toColumn: Calendario.DataKey
+
+relationship d94bd569-249b-5821-bbf7-b52050a6eb25
+	fromColumn: Consumo.HoraKey
+	toColumn: Hora.HoraKey
+
+relationship 877a852a-6eb5-55d9-87ce-a1e0e92c4198
+	fromColumn: Bobina.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship 6d07c0ee-5d32-57a9-b409-b23b5f6ef678
+	fromColumn: Bobina.ComponenteKey
+	toColumn: Componente.ComponenteKey
+
+relationship 79f8a5ed-1f34-5a3e-a517-a590344c5561
+	fromColumn: Bobina.DataKey
+	toColumn: Calendario.DataKey
+
+relationship c48d1f4c-4507-5f0f-a224-911c23c74df9
+	fromColumn: Movimento.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship aa77749f-f765-5ec2-b9c0-8f9f0a808d0c
+	fromColumn: Movimento.OperadorKey
+	toColumn: Operador.OperadorKey
+
+relationship 841fddab-8059-51cb-a482-fbb0d61c2511
+	fromColumn: Movimento.DataKey
+	toColumn: Calendario.DataKey
+
+relationship ab403428-57bb-507e-9b2a-556d498b60c9
+	fromColumn: Movimento.HoraKey
+	toColumn: Hora.HoraKey
+

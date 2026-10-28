@@ -1,0 +1,67 @@
+# Dependências
+**/node_modules/
+**/vendor/
+
+# Flutter / Dart
+**/.dart_tool/
+**/build/
+**/.gradle/
+local.properties
+**/local.properties
+
+# Node / bundlers
+**/dist/
+**/.next/
+**/coverage/
+
+# Ambiente e segredos
+.env
+.env.*
+!.env.example
+
+# APIs Node — config com credenciais (usar *.example.json)
+smart_api/api/config/api_config.json
+watch_api/api/config/api_config.json
+watch_api/api/config/api_config_toCompare.json
+
+# smart_ful — config com credenciais
+smart_ful/api/WebApi.json
+smart_ful/api/Config/client_secret_D.json
+smart_ful/api/Config/service-account-file_D.json
+smart_ful/src/Utils/Signature.pem
+
+# OAuth / chaves privadas
+**/api/oauth2/signature.pem
+
+# Flutter — UNC/senhas em shared (copiar do *.example.json)
+imirror/assets/files/json/app_config.json
+inprint/assets/files/json/app_config.json
+
+# Apps fora do escopo Mondial (não versionar)
+/itag/
+/iportal/
+
+# Scripts pontuais de recuperação (só raiz do monorepo)
+/fix_*.ps1
+/test_*.js
+/test_*.ps1
+/test_agenda_collect.js
+
+# IDE / OS
+.idea/
+*.iml
+.vscode/
+Thumbs.db
+.DS_Store
+
+# Cópias locais
+* - Copia/
+* - Copia
+
+# Extração temporária ODT
+docs/backlog/requisitos/_odt_extract/
+
+# Logs e cache comuns
+*.log
+.npm/
+.phpunit.result.cache

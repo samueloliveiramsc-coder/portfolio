@@ -1,0 +1,40 @@
+table Operador
+	lineageTag: a63a9002-bbfc-578b-bbf6-ebe3dbc5e858
+
+	column OperadorKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5a49fbb7-59fe-5227-9120-5fd32d5a8e0c
+		summarizeBy: none
+		sourceColumn: OperadorKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Matricula
+		dataType: string
+		lineageTag: f61576ac-8b25-553d-9348-90c66f7a1361
+		summarizeBy: none
+		sourceColumn: Matricula
+
+		annotation SummarizationSetBy = Automatic
+
+	column Operador
+		dataType: string
+		lineageTag: 065c5daa-794b-54fd-a279-162da2b68dd4
+		summarizeBy: none
+		sourceColumn: Operador
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Operador = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Operador"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

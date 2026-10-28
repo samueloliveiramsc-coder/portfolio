@@ -1,0 +1,121 @@
+/// Queda do saldo das bobinas entre movimentos, por hora, máquina e componente. Origem 'Fora da máquina' = baixa de estoque.
+table Consumo
+	lineageTag: 4da74300-2b6c-526b-8370-4f6ed0bfd2c6
+
+	/// Queda do saldo das bobinas que passaram por máquina. Data = movimento que registrou o novo saldo.
+	measure 'Consumo (peças)' = CALCULATE ( SUM ( Consumo[Quantidade] ), Consumo[Origem] = "Em máquina" )
+		formatString: #,0
+		displayFolder: Consumo
+		lineageTag: 7004eafe-90df-57d5-a382-3edaa0c9ffdf
+
+	/// Por dia com consumo.
+	measure 'Consumo Médio por Dia' = DIVIDE ( [Consumo (peças)], CALCULATE ( DISTINCTCOUNT ( Consumo[DataKey] ), Consumo[Origem] = "Em máquina" ) )
+		formatString: #,0
+		displayFolder: Consumo
+		lineageTag: 3d91b1ed-02a3-5e06-a575-bf77e836360f
+
+	measure 'Bobinas Esgotadas' = CALCULATE ( SUM ( Consumo[BobinasEsgotadas] ), Consumo[Origem] = "Em máquina" )
+		formatString: #,0
+		displayFolder: Consumo
+		lineageTag: 0feb143f-68cb-59be-b6ab-5b0d0bfde81b
+
+	measure 'Componentes Consumidos' = CALCULATE ( DISTINCTCOUNT ( Consumo[ComponenteKey] ), Consumo[Origem] = "Em máquina" )
+		formatString: #,0
+		displayFolder: Consumo
+		lineageTag: 9f2bafe4-6abe-5980-a1ed-938b49c22ded
+
+	/// Quedas de saldo sem a bobina ter saído de uma máquina: baixa no almoxarifado, kit ou caixa.
+	measure 'Baixas Fora da Máquina (peças)' = CALCULATE ( SUM ( Consumo[Quantidade] ), Consumo[Origem] = "Fora da máquina" )
+		formatString: #,0
+		displayFolder: Consumo
+		lineageTag: 09e5ca80-e6ab-5b16-8688-d9342c7afcda
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ac96dc88-6bed-5a13-b777-0ce86e5ab466
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f660ccbf-e1bb-5963-b428-d9559a7cbdf8
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 92bbd4e9-60d3-5073-97e1-f16aa65be29f
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ComponenteKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9fa2ffba-6b8f-56b2-b7b8-2fd2003746f7
+		summarizeBy: none
+		sourceColumn: ComponenteKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Origem
+		dataType: string
+		lineageTag: 817323e3-6585-564e-82f2-e199a409a102
+		summarizeBy: none
+		sourceColumn: Origem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantidade
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: eb5bb325-1c80-5ec0-8324-496eef4d3181
+		summarizeBy: none
+		sourceColumn: Quantidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column BobinasEsgotadas
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bc98040f-ce3f-5bd1-aaed-120b24aee02b
+		summarizeBy: none
+		sourceColumn: BobinasEsgotadas
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quedas
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 86665411-270a-536e-b821-03076026d947
+		summarizeBy: none
+		sourceColumn: Quedas
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Consumo = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Consumo"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

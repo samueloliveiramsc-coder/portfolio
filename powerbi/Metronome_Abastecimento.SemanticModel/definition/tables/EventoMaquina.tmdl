@@ -1,0 +1,131 @@
+/// Eventos de auditoria nas máquinas: barcode, splicing, realimentação, troca de cassete, descargas.
+table EventoMaquina
+	lineageTag: 90841a83-98e7-5946-88c6-8b0d7c3d5e4a
+
+	measure Eventos = COUNTROWS ( EventoMaquina )
+		formatString: #,0
+		displayFolder: Interlock
+		lineageTag: eefea9f4-e011-5a74-a65e-eace21d4d481
+
+	/// Verificações de interlock iniciadas (códigos 'in process'). Existem desde 2025; compare taxas a partir de 2026.
+	measure Verificações = CALCULATE ( [Eventos], TipoEvento[Resultado] = "Verificação" )
+		formatString: #,0
+		displayFolder: Interlock
+		lineageTag: 818f8bf4-254d-5392-93e8-851b38f5158d
+
+	/// Verificações barradas pelo interlock (componente/bobina incorreta).
+	measure Bloqueios = CALCULATE ( [Eventos], TipoEvento[Resultado] = "Bloqueio" )
+		formatString: #,0
+		displayFolder: Interlock
+		lineageTag: 0e7792ea-e906-5628-a1a2-97cd1cb00c2e
+
+	/// Bloqueios ÷ Verificações.
+	measure 'Taxa de Bloqueio %' = DIVIDE ( [Bloqueios], [Verificações] )
+		formatString: 0.0%
+		displayFolder: Interlock
+		lineageTag: 5c743cd3-b8e0-5a34-8f0b-514127a4825d
+
+	/// Emendas registradas (Splicing e Splicing Feedback).
+	measure Splicings = CALCULATE ( [Eventos], TipoEvento[Categoria] = "Splicing", TipoEvento[Resultado] = "Registro" )
+		formatString: #,0
+		displayFolder: Interlock
+		lineageTag: b16dfbea-5159-5d8c-b639-15afc22b4f25
+
+	/// Bobinas retiradas da máquina antes de acabar.
+	measure 'Descargas Forçadas' = CALCULATE ( [Eventos], TipoEvento[Categoria] = "Descarga forçada" )
+		formatString: #,0
+		displayFolder: Interlock
+		lineageTag: e8637fc3-8a01-5e58-a852-9fd7ce1d0e23
+
+	measure 'Operadores Ativos' = CALCULATE ( DISTINCTCOUNT ( EventoMaquina[OperadorKey] ), EventoMaquina[OperadorKey] <> -1 )
+		formatString: #,0
+		displayFolder: Operadores
+		lineageTag: b055bedc-9cb8-54e3-aaa9-ce67ecb517e6
+
+	column EventoId
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 68de2f37-463c-5c2b-a52d-2d997d1d71a7
+		summarizeBy: none
+		sourceColumn: EventoId
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataHora
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: dc741c8f-fcd9-5abc-ac31-8600df3e596f
+		summarizeBy: none
+		sourceColumn: DataHora
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 708d8993-8103-52d3-8c62-ed7b69b5d512
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4104856f-c18d-5c16-8ede-7c0dd8ba72e7
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 23b332ee-8602-5384-8983-a2fda3b4bed6
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column OperadorKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d5ea395a-b966-5c8b-9f30-1d4aba9ee17c
+		summarizeBy: none
+		sourceColumn: OperadorKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column TipoCodigo
+		dataType: string
+		isHidden
+		lineageTag: 910a63dd-f977-551a-a3a2-aa819c9f18af
+		summarizeBy: none
+		sourceColumn: TipoCodigo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Lado
+		dataType: string
+		lineageTag: 90741455-f210-561a-8fd6-db127eed6f3f
+		summarizeBy: none
+		sourceColumn: Lado
+
+		annotation SummarizationSetBy = Automatic
+
+	partition EventoMaquina = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "EventoMaquina"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

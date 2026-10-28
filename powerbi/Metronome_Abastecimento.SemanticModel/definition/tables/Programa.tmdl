@@ -1,0 +1,48 @@
+table Programa
+	lineageTag: ab75bf13-29a1-564c-a4fa-ac681854f866
+
+	column ProgramaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e3a752be-7b88-5592-a3d1-1af6ec92bf75
+		summarizeBy: none
+		sourceColumn: ProgramaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Programa
+		dataType: string
+		lineageTag: 332c172d-53c9-5d49-b50e-915381ae5b4e
+		summarizeBy: none
+		sourceColumn: Programa
+
+		annotation SummarizationSetBy = Automatic
+
+	column Arquivo
+		dataType: string
+		lineageTag: 970fe6a6-13a5-56ee-9348-ad4611c4610c
+		summarizeBy: none
+		sourceColumn: Arquivo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Projeto
+		dataType: string
+		lineageTag: 73830ed9-e02c-5e8e-8826-15cfd202e748
+		summarizeBy: none
+		sourceColumn: Projeto
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Programa = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Programa"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

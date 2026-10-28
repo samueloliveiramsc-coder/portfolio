@@ -1,0 +1,158 @@
+/// Conferências de setup (PlanAudit): duração do 1º feeder lido ao último confirmado.
+table Setup
+	lineageTag: 68f799cf-ed7d-5c98-940c-d290f47fbde7
+
+	measure Setups = COUNTROWS ( Setup )
+		formatString: #,0
+		displayFolder: Setup
+		lineageTag: 5c4d6c26-c920-565c-b3f9-27b4be138986
+
+	measure 'Programas Conferidos' = DISTINCTCOUNT ( Setup[ProgramaKey] )
+		formatString: #,0
+		displayFolder: Setup
+		lineageTag: 6a49247b-649b-51a9-8ad6-93794ad0150d
+
+	measure 'Feeders Conferidos' = SUM ( Setup[FeedersConferidos] )
+		formatString: #,0
+		displayFolder: Setup
+		lineageTag: 9afcf502-fc68-5497-9cd5-968e3ab9e49d
+
+	measure 'Feeders por Setup' = DIVIDE ( SUM ( Setup[Feeders] ), [Setups] )
+		formatString: #,0.0
+		displayFolder: Setup
+		lineageTag: 091e7038-39d6-5f5f-ab64-ee58aa0941e1
+
+	/// Mediana da duração; conferências sem feeders ou acima de 1 h ficam de fora.
+	measure 'Tempo Mediano de Conferência (min)' = CALCULATE ( MEDIAN ( Setup[DuracaoMin] ), Setup[DuracaoValida] = 1 )
+		formatString: #,0.0
+		displayFolder: Setup
+		lineageTag: 5de6a8d9-d547-5d20-9168-98974f4e9ae9
+
+	measure 'Tempo Médio de Conferência (min)' = CALCULATE ( AVERAGE ( Setup[DuracaoMin] ), Setup[DuracaoValida] = 1 )
+		formatString: #,0.0
+		displayFolder: Setup
+		lineageTag: 22c0a896-6815-5962-ab32-d1b09a94cd28
+
+	/// Sem feeders ou acima de 1 h (sessão esquecida aberta).
+	measure 'Conferências Fora do Padrão' = CALCULATE ( [Setups], Setup[DuracaoValida] = 0 )
+		formatString: #,0
+		displayFolder: Setup
+		lineageTag: 250ed618-f1e7-575d-9884-2ac68a0c6ac1
+
+	column SetupId
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 445ec8c6-8d92-5d7f-9b05-82cdefe089a3
+		summarizeBy: none
+		sourceColumn: SetupId
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataHora
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: beb3c5c9-4b41-57f6-b2ae-7ce1bd2147ec
+		summarizeBy: none
+		sourceColumn: DataHora
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 057facb9-c802-5e0b-ba56-56e6cfd26ce9
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2890d190-967b-53c2-a195-237805d6ec1a
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 61f0b93b-13a4-5fe9-afd4-d635a15fa67b
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 77138b9b-606a-5700-8758-a6f302ec0dfc
+		summarizeBy: none
+		sourceColumn: ProgramaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column OperadorKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 491ad285-4cfc-5409-b7d0-d274faff06d5
+		summarizeBy: none
+		sourceColumn: OperadorKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Feeders
+		dataType: int64
+		formatString: 0
+		lineageTag: 8ee15106-0652-5bdb-8968-d9911dffffef
+		summarizeBy: none
+		sourceColumn: Feeders
+
+		annotation SummarizationSetBy = Automatic
+
+	column FeedersConferidos
+		dataType: int64
+		formatString: 0
+		lineageTag: e02c75b0-c741-5d01-8628-62825a8e1c00
+		summarizeBy: none
+		sourceColumn: FeedersConferidos
+
+		annotation SummarizationSetBy = Automatic
+
+	column DuracaoMin
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 3d897079-fdca-5444-b3d8-c34a92e347d9
+		summarizeBy: sum
+		sourceColumn: DuracaoMin
+
+		annotation SummarizationSetBy = Automatic
+
+	column DuracaoValida
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fa29bd82-0c92-5cef-9103-1066569f28d1
+		summarizeBy: none
+		sourceColumn: DuracaoValida
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Setup = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Setup"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,99 @@
+/// Ocorrências por motivo de perda. Um pick perdido pode ter mais de um motivo: não somar com Missed.
+table PerdaMotivo
+	lineageTag: 33f29040-62fd-5413-977e-368f572e425e
+
+	measure 'Ocorrências de Perda' = SUM ( PerdaMotivo[Ocorrencias] )
+		formatString: #,0
+		displayFolder: Perdas
+		lineageTag: e184a187-f77f-5212-a9e6-5b190af51a84
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2aa62aa4-4fae-5109-a491-0682e89c3427
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b3b1e9e6-ac3e-503f-a07a-12df5e1c3f3f
+		summarizeBy: none
+		sourceColumn: ProgramaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ComponenteKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a3fa15ca-1209-5d92-94d9-0770c6becad6
+		summarizeBy: none
+		sourceColumn: ComponenteKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4865f336-6f47-56db-88eb-5109eecee38f
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 233d5885-459c-5705-b92b-2aa74d75f47f
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6ab25e25-175d-513b-a4a2-807e4b952937
+		summarizeBy: none
+		sourceColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Motivo
+		dataType: string
+		lineageTag: 4baa8d6d-1131-54df-a10a-01f3b28907f8
+		summarizeBy: none
+		sourceColumn: Motivo
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ocorrencias
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 730dc0f3-ab75-5227-bdf5-e78b60745152
+		summarizeBy: none
+		sourceColumn: Ocorrencias
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PerdaMotivo = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "PerdaMotivo"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

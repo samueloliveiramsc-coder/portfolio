@@ -1,0 +1,65 @@
+/// Máquinas SMT; a linha vem do layout ativo de cada linha (ThreadSchemaLayout).
+table Maquina
+	lineageTag: 42d49aa0-fc2e-5267-b33d-c190b184552f
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bbf59f2d-b12c-57cc-b1af-af0f6fb08556
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Linha
+		dataType: string
+		lineageTag: f30e6bb0-c4be-50a7-9d2a-dee94d38a926
+		summarizeBy: none
+		sourceColumn: Linha
+
+		annotation SummarizationSetBy = Automatic
+
+	column Maquina
+		dataType: string
+		lineageTag: be9a1699-5901-5fcc-b3de-6b3979c27ca1
+		summarizeBy: none
+		sourceColumn: Maquina
+
+		annotation SummarizationSetBy = Automatic
+
+	column Familia
+		dataType: string
+		lineageTag: e989ec17-abdb-57f3-9863-e779b697e19b
+		summarizeBy: none
+		sourceColumn: Familia
+
+		annotation SummarizationSetBy = Automatic
+
+	column Modelo
+		dataType: string
+		lineageTag: 8e52821f-236a-5d62-8277-b896f096fd4c
+		summarizeBy: none
+		sourceColumn: Modelo
+
+		annotation SummarizationSetBy = Automatic
+
+	column LinhaMaquina
+		dataType: string
+		lineageTag: 0497b677-a480-514b-8198-e30a907e4a6a
+		summarizeBy: none
+		sourceColumn: LinhaMaquina
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Maquina = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Maquina"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

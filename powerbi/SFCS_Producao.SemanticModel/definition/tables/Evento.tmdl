@@ -1,0 +1,158 @@
+/// Falhas de coleta, falhas de consumo (feeder não encontrado) e interlocks.
+table Evento
+	lineageTag: d3b07c0d-c27c-5e56-b07f-0c87e47e6977
+
+	measure Eventos = COUNTROWS ( Evento )
+		formatString: #,0
+		displayFolder: Eventos
+		lineageTag: 6bc98ef2-8e50-58d6-9486-6aa3d3a8d6c8
+
+	measure 'Falhas de Coleta' = CALCULATE ( [Eventos], Evento[TipoEvento] = "Falha de coleta" )
+		formatString: #,0
+		displayFolder: Eventos
+		lineageTag: 28882d09-0d77-5cd3-a2e4-7412cc6afae4
+
+	measure 'Falhas de Consumo' = CALCULATE ( [Eventos], Evento[TipoEvento] = "Falha de consumo" )
+		formatString: #,0
+		displayFolder: Eventos
+		lineageTag: 55009679-dbcb-5b91-a440-cd571a7ccc92
+
+	measure Interlocks = CALCULATE ( [Eventos], Evento[TipoEvento] = "Interlock" )
+		formatString: #,0
+		displayFolder: Eventos
+		lineageTag: 48db1817-4f38-575c-9471-e9b65fc89060
+
+	column EventoId
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 2c0158de-5bc0-5582-8ab6-261f89ce5e4c
+		summarizeBy: none
+		sourceColumn: EventoId
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ab6609eb-7501-5814-8568-c6a99bc5187f
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3556482b-98f4-5fed-9fd3-946bdd1ebac0
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 36b9c048-2d08-5f08-899a-ec3746dfa8f2
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataHoraLocal
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: 55a05733-1bcc-5e95-9f2d-cc1a1e26c7d6
+		summarizeBy: none
+		sourceColumn: DataHoraLocal
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraLocal
+		dataType: dateTime
+		formatString: dd/MM HH:mm
+		lineageTag: d4a94e7c-d831-505d-b5a2-76a6a11dc771
+		summarizeBy: none
+		sourceColumn: HoraLocal
+
+		annotation SummarizationSetBy = Automatic
+
+	column TipoEvento
+		dataType: string
+		lineageTag: 58ee5a25-579e-542d-a562-9215b9d50608
+		summarizeBy: none
+		sourceColumn: TipoEvento
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 4fe85a14-d640-50d3-a265-2b36ec6ae0a4
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column Codigo
+		dataType: string
+		lineageTag: 15560931-643e-533c-9414-d59f393dc0ef
+		summarizeBy: none
+		sourceColumn: Codigo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mensagem
+		dataType: string
+		lineageTag: 5f541a04-a1e8-5ee6-b5b5-42ad6472711a
+		summarizeBy: none
+		sourceColumn: Mensagem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Lado
+		dataType: string
+		lineageTag: 45c4c302-20fb-51dd-b48c-8e3e49ed3c18
+		summarizeBy: none
+		sourceColumn: Lado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Slot
+		dataType: int64
+		formatString: 0
+		lineageTag: c1d08c8e-99c4-52d1-832a-8ae47048de48
+		summarizeBy: none
+		sourceColumn: Slot
+
+		annotation SummarizationSetBy = Automatic
+
+	column Feeder
+		dataType: string
+		lineageTag: 8ad3f74c-09b2-58aa-9835-32ad0c30b6de
+		summarizeBy: none
+		sourceColumn: Feeder
+
+		annotation SummarizationSetBy = Automatic
+
+	column CodigoFornecedor
+		dataType: string
+		lineageTag: d33fd445-3aa7-5397-af59-f2ed576f818f
+		summarizeBy: none
+		sourceColumn: CodigoFornecedor
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Evento = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Evento"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

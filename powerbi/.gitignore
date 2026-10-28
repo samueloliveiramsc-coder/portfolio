@@ -1,0 +1,6 @@
+# Arquivos locais do Power BI Desktop (cache de dados e preferências do usuário)
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# cache do Python (geradores em tools/)
+__pycache__/

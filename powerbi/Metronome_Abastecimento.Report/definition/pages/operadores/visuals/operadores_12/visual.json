@@ -1,0 +1,420 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "operadores_12",
+  "position": {
+    "x": 248,
+    "y": 635,
+    "z": 21000,
+    "height": 437,
+    "width": 1664,
+    "tabOrder": 21000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Operador"
+                    }
+                  },
+                  "Property": "Operador"
+                }
+              },
+              "queryRef": "Operador.Operador",
+              "nativeQueryRef": "Operador"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EventoMaquina"
+                    }
+                  },
+                  "Property": "Verificações"
+                }
+              },
+              "queryRef": "EventoMaquina.Verificações",
+              "nativeQueryRef": "Verificações"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EventoMaquina"
+                    }
+                  },
+                  "Property": "Bloqueios"
+                }
+              },
+              "queryRef": "EventoMaquina.Bloqueios",
+              "nativeQueryRef": "Bloqueios"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EventoMaquina"
+                    }
+                  },
+                  "Property": "Taxa de Bloqueio %"
+                }
+              },
+              "queryRef": "EventoMaquina.Taxa de Bloqueio %",
+              "nativeQueryRef": "Taxa de Bloqueio %"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "EventoMaquina"
+                    }
+                  },
+                  "Property": "Splicings"
+                }
+              },
+              "queryRef": "EventoMaquina.Splicings",
+              "nativeQueryRef": "Splicings"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Setup"
+                    }
+                  },
+                  "Property": "Setups"
+                }
+              },
+              "queryRef": "Setup.Setups",
+              "nativeQueryRef": "Setups"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Movimento"
+                    }
+                  },
+                  "Property": "Movimentos"
+                }
+              },
+              "queryRef": "Movimento.Movimentos",
+              "nativeQueryRef": "Movimentos"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "EventoMaquina"
+                  }
+                },
+                "Property": "Verificações"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "187.75524932393265D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Operador.Operador"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E3E6EA'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Atividade por operador (apoio a treinamento, não ranking)'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "16D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2A37'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "c602bc3dc2b2f36fb644",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Operador"
+              }
+            },
+            "Property": "Operador"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "76d2060721760733a7a1",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "EventoMaquina"
+              }
+            },
+            "Property": "Verificações"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "f2a0d7e858429a1e4981",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "EventoMaquina"
+              }
+            },
+            "Property": "Bloqueios"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "40a1d82dfb26a722e4e9",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "EventoMaquina"
+              }
+            },
+            "Property": "Taxa de Bloqueio %"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "8fca3b2ee2c6cdc8b794",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "EventoMaquina"
+              }
+            },
+            "Property": "Splicings"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4622068522cfdf003f89",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Setup"
+              }
+            },
+            "Property": "Setups"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "d7235d0a7c374464f56f",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Movimento"
+              }
+            },
+            "Property": "Movimentos"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

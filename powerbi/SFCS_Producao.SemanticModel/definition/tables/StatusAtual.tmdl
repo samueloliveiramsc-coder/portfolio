@@ -1,0 +1,122 @@
+/// Foto atual de cada máquina (coleção SPEND).
+table StatusAtual
+	lineageTag: 2fc314ba-44b9-5416-bf5b-a43ec262ca1a
+
+	measure Máquinas = COUNTROWS ( StatusAtual )
+		formatString: #,0
+		displayFolder: Status
+		lineageTag: 14e48f86-9db3-59a5-9206-c909ca5bd35f
+
+	measure 'Máquinas com Coleta OK' = SUM ( StatusAtual[ColetaOk] )
+		formatString: #,0
+		displayFolder: Status
+		lineageTag: 12f9a646-184e-5ac0-94e1-7a4fad5bdfe5
+
+	measure '% Máquinas com Coleta OK' = DIVIDE ( [Máquinas com Coleta OK], [Máquinas] )
+		formatString: 0%
+		displayFolder: Status
+		lineageTag: 2b182f26-b57f-5733-b232-eac0f917d245
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7bd41fbe-8fb0-56dc-a37c-0803eb0f9736
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramaAtual
+		dataType: string
+		lineageTag: 19527d5a-220e-5093-b999-d495bbfccfcd
+		summarizeBy: none
+		sourceColumn: ProgramaAtual
+
+		annotation SummarizationSetBy = Automatic
+
+	column UltimaLeituraOkLocal
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: 8eb0d7b2-ba0e-5751-ab54-bf6a549405cb
+		summarizeBy: none
+		sourceColumn: UltimaLeituraOkLocal
+
+		annotation SummarizationSetBy = Automatic
+
+	column UltimaFalhaLocal
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: 407a6e70-34fa-5962-b318-0bc2e8845f35
+		summarizeBy: none
+		sourceColumn: UltimaFalhaLocal
+
+		annotation SummarizationSetBy = Automatic
+
+	column UltimaFalhaMensagem
+		dataType: string
+		lineageTag: 3d8a844e-13f0-549e-8eb7-29f2e32cf1c4
+		summarizeBy: none
+		sourceColumn: UltimaFalhaMensagem
+
+		annotation SummarizationSetBy = Automatic
+
+	column SituacaoColeta
+		dataType: string
+		lineageTag: eef96b02-5463-57df-a564-ab340a53ead8
+		summarizeBy: none
+		sourceColumn: SituacaoColeta
+
+		annotation SummarizationSetBy = Automatic
+
+	column ColetaOk
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a247ef5d-ff42-54ab-9ca4-9872d3832996
+		summarizeBy: none
+		sourceColumn: ColetaOk
+
+		annotation SummarizationSetBy = Automatic
+
+	column PlacasAcum
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ab003445-3bba-530f-9dae-d5e943da9953
+		summarizeBy: none
+		sourceColumn: PlacasAcum
+
+		annotation SummarizationSetBy = Automatic
+
+	column PickAcum
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 83698fb6-bf4d-56ca-8314-c48f3426dcd2
+		summarizeBy: none
+		sourceColumn: PickAcum
+
+		annotation SummarizationSetBy = Automatic
+
+	column MissedAcum
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c013e4be-86db-54fa-8b80-a4db4a3ce17d
+		summarizeBy: none
+		sourceColumn: MissedAcum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition StatusAtual = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "StatusAtual"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

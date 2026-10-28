@@ -1,0 +1,112 @@
+/// Trocas de programa; tempo de troca = última placa do programa anterior até a primeira do novo.
+table TrocaPrograma
+	lineageTag: 83036e04-a6cb-51af-b0a8-db3b410f41b5
+
+	measure Trocas = COUNTROWS ( TrocaPrograma )
+		formatString: #,0
+		displayFolder: Trocas
+		lineageTag: 148a477f-95e9-52a6-9ba3-d01e3b2a0a3c
+
+	measure 'Tempo Médio de Troca (min)' = AVERAGE ( TrocaPrograma[MinutosTroca] )
+		formatString: #,0.0
+		displayFolder: Trocas
+		lineageTag: 01792345-5183-5148-8c0d-2d18a908fb09
+
+	measure 'Tempo Total de Troca (h)' = DIVIDE ( SUM ( TrocaPrograma[MinutosTroca] ), 60 )
+		formatString: #,0.0
+		displayFolder: Trocas
+		lineageTag: afa87479-ef8e-562f-8fef-51041521e66e
+
+	column LeituraId
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4f2167c1-e489-5e95-9595-b903e8bac0b8
+		summarizeBy: none
+		sourceColumn: LeituraId
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 963383f3-c6c9-51ec-ab95-46d00b31802a
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 4101167b-76a7-55a2-8224-8ca0747b9ad4
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bb91df50-d71f-5906-ac25-292864865095
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataHoraLocal
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: f04c8b2a-6f6b-55b1-ba33-f9ea950eb443
+		summarizeBy: none
+		sourceColumn: DataHoraLocal
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramaAnterior
+		dataType: string
+		lineageTag: 559c97c0-ca31-5bb2-bfd8-7a7637f15262
+		summarizeBy: none
+		sourceColumn: ProgramaAnterior
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramaNovo
+		dataType: string
+		lineageTag: 90d7160a-747a-5550-b78a-8fd8c87082c9
+		summarizeBy: none
+		sourceColumn: ProgramaNovo
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProdutoNovo
+		dataType: string
+		lineageTag: 745002f9-0bb1-5546-a41a-be46d8d4812a
+		summarizeBy: none
+		sourceColumn: ProdutoNovo
+
+		annotation SummarizationSetBy = Automatic
+
+	column MinutosTroca
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 5d7ed31c-b48f-5c6e-b218-1215794c2640
+		summarizeBy: sum
+		sourceColumn: MinutosTroca
+
+		annotation SummarizationSetBy = Automatic
+
+	partition TrocaPrograma = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "TrocaPrograma"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

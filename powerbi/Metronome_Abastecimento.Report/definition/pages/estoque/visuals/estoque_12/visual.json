@@ -1,0 +1,348 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "estoque_12",
+  "position": {
+    "x": 248,
+    "y": 635,
+    "z": 21000,
+    "height": 437,
+    "width": 690,
+    "tabOrder": 21000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Componente"
+                    }
+                  },
+                  "Property": "Componente"
+                }
+              },
+              "queryRef": "Componente.Componente",
+              "nativeQueryRef": "Componente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Componente"
+                    }
+                  },
+                  "Property": "NomeComponente"
+                }
+              },
+              "queryRef": "Componente.NomeComponente",
+              "nativeQueryRef": "NomeComponente"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Bobina"
+                    }
+                  },
+                  "Property": "Bobinas com Saldo"
+                }
+              },
+              "queryRef": "Bobina.Bobinas com Saldo",
+              "nativeQueryRef": "Bobinas com Saldo"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Bobina"
+                    }
+                  },
+                  "Property": "Bobinas Paradas"
+                }
+              },
+              "queryRef": "Bobina.Bobinas Paradas",
+              "nativeQueryRef": "Bobinas Paradas"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Bobina"
+                    }
+                  },
+                  "Property": "Peças em Estoque"
+                }
+              },
+              "queryRef": "Bobina.Peças em Estoque",
+              "nativeQueryRef": "Peças em Estoque"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Bobina"
+                  }
+                },
+                "Property": "Bobinas Paradas"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E3E6EA'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Componentes com mais bobinas paradas'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "16D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2A37'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "46d3b439f591e88cf33f",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Componente"
+              }
+            },
+            "Property": "Componente"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "2f57c658abd12bd24e9d",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Componente"
+              }
+            },
+            "Property": "NomeComponente"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "2b636c02723992a5070d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Bobina"
+              }
+            },
+            "Property": "Bobinas com Saldo"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4b164756b7746ca3e86d",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Bobina"
+              }
+            },
+            "Property": "Bobinas Paradas"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "579c3c6ae66c140de38b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Bobina"
+              }
+            },
+            "Property": "Peças em Estoque"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

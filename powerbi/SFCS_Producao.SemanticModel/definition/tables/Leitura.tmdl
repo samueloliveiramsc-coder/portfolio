@@ -1,0 +1,369 @@
+/// Uma linha por leitura SPEND (~2 min) sem repetidas; valores = diferença desde a leitura anterior.
+table Leitura
+	lineageTag: 4531ce15-8ed7-5ae9-b934-b05c57903125
+
+	/// Placas produzidas pela linha: a maior contagem entre as máquinas da linha (a mesma placa passa por todas). Por máquina, é a contagem da própria máquina.
+	measure Placas = SUMX ( VALUES ( Maquina[Linha] ), CALCULATE ( MAXX ( VALUES ( Maquina[MaquinaKey] ), CALCULATE ( SUM ( Leitura[QtdPlacas] ) ) ) ) )
+		formatString: #,0
+		displayFolder: Produção
+		lineageTag: c835fed7-8235-52ac-be59-eac2675b93b7
+
+	/// Soma das placas de cada máquina: uma placa conta uma vez em cada máquina por onde passa.
+	measure 'Placas Processadas' = SUM ( Leitura[QtdPlacas] )
+		formatString: #,0
+		displayFolder: Produção
+		lineageTag: 2ec77cdf-0abf-5060-a090-5f20c8956c14
+
+	/// Componentes coletados (StoreNum.Pick).
+	measure Pick = SUM ( Leitura[QtdPick] )
+		formatString: #,0
+		displayFolder: Produção
+		lineageTag: 77af04e7-4dc5-5cc0-ac4c-712d9dcd68eb
+
+	/// Componentes montados (StoreNum.Place).
+	measure Place = SUM ( Leitura[QtdPlace] )
+		formatString: #,0
+		displayFolder: Produção
+		lineageTag: 2a8e863a-6008-523c-b994-7df01c53e4b7
+
+	measure 'Componentes por Placa' = DIVIDE ( [Place], [Placas] )
+		formatString: #,0.0
+		displayFolder: Produção
+		lineageTag: 07207b40-a034-5e2b-b400-bfc9e429df7a
+
+	/// TimeRun, só máquinas KE.
+	measure 'Horas Rodando' = DIVIDE ( SUM ( Leitura[TempoRodando] ), 3600 )
+		formatString: #,0.0
+		displayFolder: Disponibilidade
+		lineageTag: eedeedf9-7242-595c-991a-5f94df159250
+
+	/// TimeDown, só máquinas KE.
+	measure 'Horas Paradas' = DIVIDE ( SUM ( Leitura[TempoParado] ), 3600 )
+		formatString: #,0.0
+		displayFolder: Disponibilidade
+		lineageTag: d11d57bb-d556-54a3-83c3-6b0df62b6940
+
+	/// Rodando ÷ (Rodando + Parado). Em branco para máquinas que não informam tempos (SIG/HT).
+	measure 'Disponibilidade %' = DIVIDE ( SUM ( Leitura[TempoRodando] ), SUM ( Leitura[TempoRodando] ) + SUM ( Leitura[TempoParado] ) )
+		formatString: 0.0%
+		displayFolder: Disponibilidade
+		lineageTag: 74d7f714-8978-5d56-b5bf-90984cf28fc3
+
+	/// Placas por hora de máquina rodando (só máquinas KE, que informam tempos).
+	measure 'Placas por Hora Rodando' = DIVIDE ( CALCULATE ( [Placas Processadas], Maquina[InformaTempos] = "Sim" ), [Horas Rodando] )
+		formatString: #,0.0
+		displayFolder: Produção
+		lineageTag: 8e6ace2d-3c0f-51e4-bf60-896e9ee8c01d
+
+	measure 'Reinícios de Contador' = SUM ( Leitura[Reinicio] )
+		formatString: #,0
+		displayFolder: Qualidade dos dados
+		lineageTag: 1bddecc0-a555-5b2c-a63b-6dcdd03aab87
+
+	measure Leituras = COUNTROWS ( Leitura )
+		formatString: #,0
+		displayFolder: Qualidade dos dados
+		lineageTag: e370dbe2-629b-5ced-b565-85fd6266689b
+
+	/// Placas × ciclo de referência ÷ tempo rodando, limitado a 100%. O ciclo é a TAXA DEMONSTRADA (CicloIdeal), não um padrão de engenharia.
+	measure 'Desempenho %' = VAR d = DIVIDE ( CALCULATE ( SUM ( Leitura[TempoIdeal] ), Leitura[TemCiclo] = 1 ), CALCULATE ( SUM ( Leitura[TempoRodando] ), Leitura[TemCiclo] = 1 ) ) RETURN IF ( ISBLANK ( d ), BLANK (), MIN ( 1, d ) )
+		formatString: 0.0%
+		displayFolder: OEE
+		lineageTag: acb411d8-826b-5009-87c3-92f8214f4ec4
+
+	/// Disponibilidade × Desempenho. Não há dado de placas aprovadas/reprovadas, então a qualidade fica de fora (equivale a 100%).
+	measure 'OEE % (sem qualidade)' = [Disponibilidade %] * [Desempenho %]
+		formatString: 0.0%
+		displayFolder: OEE
+		lineageTag: d200fcd8-bd81-5c80-b33a-ac15bff67efe
+
+	column LeituraId
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c69dfeda-c50e-5849-bb95-f2f611580979
+		summarizeBy: none
+		sourceColumn: LeituraId
+
+		annotation SummarizationSetBy = Automatic
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a3f7ada1-33e2-52a6-ba2c-8f21143affc1
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProgramaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5535b34a-6aa8-50ac-adfe-19e8114a7308
+		summarizeBy: none
+		sourceColumn: ProgramaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: bee344ea-42d6-5a83-a15f-e1f54a19c116
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1b504a8c-954f-582a-a6c8-e9de89a954b3
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataHoraLocal
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: d61d6f36-b40f-5bf4-a991-217295339c5c
+		summarizeBy: none
+		sourceColumn: DataHoraLocal
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraLocal
+		dataType: dateTime
+		formatString: dd/MM HH:mm
+		lineageTag: eba01623-6662-532c-9d12-dbfb0dae4db9
+		summarizeBy: none
+		sourceColumn: HoraLocal
+
+		annotation SummarizationSetBy = Automatic
+
+	column Reinicio
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 298339d8-38e6-5d2e-98d7-bb47bb8b7bad
+		summarizeBy: none
+		sourceColumn: Reinicio
+
+		annotation SummarizationSetBy = Automatic
+
+	column TrocaPrograma
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f3a02571-6c72-52a3-a535-1e9c4a9426df
+		summarizeBy: none
+		sourceColumn: TrocaPrograma
+
+		annotation SummarizationSetBy = Automatic
+
+	column DadoSuspeito
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9255c497-167c-5ddd-804c-288b3c555189
+		summarizeBy: none
+		sourceColumn: DadoSuspeito
+
+		annotation SummarizationSetBy = Automatic
+
+	column ContadorRetomado
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ca325cd8-7c6c-5b22-9368-f2426dc4b98d
+		summarizeBy: none
+		sourceColumn: ContadorRetomado
+
+		annotation SummarizationSetBy = Automatic
+
+	column EstadoMaquina
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6227ac22-249c-5b6f-b08a-3a68f80b32b7
+		summarizeBy: none
+		sourceColumn: EstadoMaquina
+
+		annotation SummarizationSetBy = Automatic
+
+	column CodigoErro
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c4635bbc-9d25-530e-9be4-d14f4f0d8f00
+		summarizeBy: none
+		sourceColumn: CodigoErro
+
+		annotation SummarizationSetBy = Automatic
+
+	column QtdPlacas
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f73efde7-d498-5b31-ad88-bdf96f235e0d
+		summarizeBy: none
+		sourceColumn: QtdPlacas
+
+		annotation SummarizationSetBy = Automatic
+
+	column QtdPick
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 05820fd9-4fd1-5013-a0f5-4c3ddb6e7748
+		summarizeBy: none
+		sourceColumn: QtdPick
+
+		annotation SummarizationSetBy = Automatic
+
+	column QtdPlace
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b8d21d63-7a7e-50ac-a334-bc711fff18e0
+		summarizeBy: none
+		sourceColumn: QtdPlace
+
+		annotation SummarizationSetBy = Automatic
+
+	column QtdMissed
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b1f8fa40-82a1-5ca3-b732-3a018f687b15
+		summarizeBy: none
+		sourceColumn: QtdMissed
+
+		annotation SummarizationSetBy = Automatic
+
+	column TempoRodando
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: dd21b785-9e7e-5462-824b-6ef2fa45a634
+		summarizeBy: none
+		sourceColumn: TempoRodando
+
+		annotation SummarizationSetBy = Automatic
+
+	column TempoParado
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: dd2bae5d-cf21-5077-98de-9e5cb3ff91bc
+		summarizeBy: none
+		sourceColumn: TempoParado
+
+		annotation SummarizationSetBy = Automatic
+
+	column TempoFalha
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a5bbc07c-0568-55a5-a1c1-de9e480fd021
+		summarizeBy: none
+		sourceColumn: TempoFalha
+
+		annotation SummarizationSetBy = Automatic
+
+	column TempoSemComponente
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cd21f15f-a857-5dee-b282-5c44f5cd9790
+		summarizeBy: none
+		sourceColumn: TempoSemComponente
+
+		annotation SummarizationSetBy = Automatic
+
+	column TempoReparo
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 04a2e8af-d511-5199-a42d-d0ab69fa8a2c
+		summarizeBy: none
+		sourceColumn: TempoReparo
+
+		annotation SummarizationSetBy = Automatic
+
+	column TempoParadaParcial
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b7270f68-52b4-531d-b44f-c580aaa72d8e
+		summarizeBy: none
+		sourceColumn: TempoParadaParcial
+
+		annotation SummarizationSetBy = Automatic
+
+	column TempoEsperaEntrada
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c0d7428f-0551-5958-9cd5-d3d7d3dc8506
+		summarizeBy: none
+		sourceColumn: TempoEsperaEntrada
+
+		annotation SummarizationSetBy = Automatic
+
+	column TempoEsperaSaida
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5de94085-a6d7-5ebe-a38d-82bbff2260ed
+		summarizeBy: none
+		sourceColumn: TempoEsperaSaida
+
+		annotation SummarizationSetBy = Automatic
+
+	column TempoPlaca
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 517c7463-5bd7-5afb-bf0c-e4403596b661
+		summarizeBy: none
+		sourceColumn: TempoPlaca
+
+		annotation SummarizationSetBy = Automatic
+
+	column TempoIdeal
+		dataType: double
+		isHidden
+		lineageTag: d6ed6667-1d68-535f-ab07-052e85bfbfaf
+		summarizeBy: sum
+		sourceColumn: TempoIdeal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TemCiclo
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 74d7dcb6-4f90-59f9-b5b3-b5b006241b3b
+		summarizeBy: none
+		sourceColumn: TemCiclo
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Leitura = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Leitura"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

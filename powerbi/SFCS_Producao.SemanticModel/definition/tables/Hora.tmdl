@@ -1,0 +1,41 @@
+table Hora
+	lineageTag: f5a7d324-a526-50b3-a040-6c14e1c985b6
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d8531ea8-7bfe-58f0-b663-f3a3c8a4d7bb
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hora
+		dataType: string
+		lineageTag: 98ae5921-56ff-5eab-83fd-6793c71f8d4d
+		summarizeBy: none
+		sourceColumn: Hora
+		sortByColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Turno
+		dataType: string
+		lineageTag: ddc7db7e-aad0-5341-bbd4-ab2b5b9bd7e2
+		summarizeBy: none
+		sourceColumn: Turno
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Hora = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Hora"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

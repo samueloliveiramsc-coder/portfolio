@@ -1,0 +1,84 @@
+/// Indicadores de qualidade da origem calculados na última carga.
+table QualidadeDados
+	lineageTag: 33205c6f-62da-5fa1-a90e-a5fbfafcec24
+
+	/// Último registro da origem na carga.
+	measure 'Dados Até' = MAX ( QualidadeDados[DataCorte] )
+		formatString: dd/MM/yyyy HH:mm
+		displayFolder: Qualidade dos dados
+		lineageTag: c1da2bb7-bbfe-55a7-ba58-7f45fb6ba625
+
+	column Ordem
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a6dc3eb0-770b-5b9a-be47-b92bd1669c1f
+		summarizeBy: none
+		sourceColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Indicador
+		dataType: string
+		lineageTag: ebd858ca-67a0-5a48-86a6-b4ce8239e3fe
+		summarizeBy: none
+		sourceColumn: Indicador
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ocorrencias
+		dataType: int64
+		formatString: #,0
+		lineageTag: 6ec6f5ad-ce13-58fb-aed7-a603ccce6b2a
+		summarizeBy: none
+		sourceColumn: Ocorrencias
+
+		annotation SummarizationSetBy = Automatic
+
+	column Total
+		dataType: int64
+		formatString: #,0
+		lineageTag: 06b77e76-1a50-5ca2-9643-9db9b9e9c5ac
+		summarizeBy: none
+		sourceColumn: Total
+
+		annotation SummarizationSetBy = Automatic
+
+	column Percentual
+		dataType: double
+		formatString: 0.0%
+		lineageTag: b807c57e-f0e9-5fe8-86f0-ab6b903b831c
+		summarizeBy: sum
+		sourceColumn: Percentual
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tratamento
+		dataType: string
+		lineageTag: 2bbb9427-63a5-5fd1-9bb5-b23651cbf252
+		summarizeBy: none
+		sourceColumn: Tratamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataCorte
+		dataType: dateTime
+		formatString: dd/MM/yyyy HH:mm
+		lineageTag: ee831c64-2c20-58ba-a86d-91a8a661902a
+		summarizeBy: none
+		sourceColumn: DataCorte
+
+		annotation SummarizationSetBy = Automatic
+
+	partition QualidadeDados = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "QualidadeDados"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

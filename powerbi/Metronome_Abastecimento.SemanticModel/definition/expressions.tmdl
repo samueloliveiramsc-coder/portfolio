@@ -1,0 +1,12 @@
+/// Servidor SQL Server com o banco Metronome_DW
+expression Servidor = "localhost" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 908e89a7-6f76-5fb4-aaf4-de6c3307f35e
+
+	annotation PBI_ResultType = Text
+
+/// Banco modelado a partir do Metronome_PRO (etl/Metronome)
+expression Banco = "Metronome_DW" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: c397a0e1-afa1-545e-98a8-feb7d0d71e8a
+
+	annotation PBI_ResultType = Text
+

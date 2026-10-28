@@ -1,0 +1,87 @@
+/// Tempos informados pelas máquinas KE. As causas de parada se sobrepõem: não somar entre categorias.
+table TempoMaquina
+	lineageTag: 1f1d5ec2-ec41-513f-921b-61c85c8c4ff6
+
+	measure 'Horas por Categoria' = DIVIDE ( SUM ( TempoMaquina[Segundos] ), 3600 )
+		formatString: #,0.0
+		displayFolder: Disponibilidade
+		lineageTag: 85001e10-430b-5cb7-91c4-c3abe819070e
+
+	column MaquinaKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 96e6705c-e5e3-538a-b790-df7690d1ff59
+		summarizeBy: none
+		sourceColumn: MaquinaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column DataKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 65108ab1-f456-51bd-a985-e9930de53615
+		summarizeBy: none
+		sourceColumn: DataKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column HoraKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c896dcb5-664d-55ba-baf0-21bf91ac1ac0
+		summarizeBy: none
+		sourceColumn: HoraKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9a78a457-ded8-5616-aa0d-e875d9a11da1
+		summarizeBy: none
+		sourceColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Grupo
+		dataType: string
+		lineageTag: fc13293f-127b-5476-bed9-e0f5f9219d92
+		summarizeBy: none
+		sourceColumn: Grupo
+
+		annotation SummarizationSetBy = Automatic
+
+	column Categoria
+		dataType: string
+		lineageTag: 4e49623d-f4f8-5a05-a11c-a1ced100af3c
+		summarizeBy: none
+		sourceColumn: Categoria
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segundos
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 523b80e2-e45e-59e1-9a82-77712b4525e7
+		summarizeBy: none
+		sourceColumn: Segundos
+
+		annotation SummarizationSetBy = Automatic
+
+	partition TempoMaquina = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "TempoMaquina"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

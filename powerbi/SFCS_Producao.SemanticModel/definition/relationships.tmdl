@@ -1,0 +1,120 @@
+relationship f7b1ddb8-3714-5225-8959-d7a2d8cebe10
+	fromColumn: Leitura.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship b435ee09-d2cf-5573-a73e-f41b1c135159
+	fromColumn: Leitura.ProgramaKey
+	toColumn: Programa.ProgramaKey
+
+relationship 0402174f-2668-5014-9cd6-efa2f267bcb5
+	fromColumn: Leitura.DataKey
+	toColumn: Calendario.DataKey
+
+relationship 558a61c6-8c57-5166-a412-d70f563d9868
+	fromColumn: Leitura.HoraKey
+	toColumn: Hora.HoraKey
+
+relationship 3b33ab57-2292-53af-b008-8fb85b8475ad
+	fromColumn: Feeder.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship d15a6521-c8c2-5415-947a-24b81556ec49
+	fromColumn: Feeder.ProgramaKey
+	toColumn: Programa.ProgramaKey
+
+relationship e7a61262-0bfc-55a9-bd34-88e7cf9b8a59
+	fromColumn: Feeder.ComponenteKey
+	toColumn: Componente.ComponenteKey
+
+relationship a7a08533-2614-593f-81b7-723f7aab9410
+	fromColumn: Feeder.DataKey
+	toColumn: Calendario.DataKey
+
+relationship 822ce803-b2f0-5cc9-959b-4afaf8c2ba89
+	fromColumn: Feeder.HoraKey
+	toColumn: Hora.HoraKey
+
+relationship 60a22a23-1058-5d59-a127-4a42855c3b11
+	fromColumn: PerdaMotivo.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship f0ae8707-113e-5f4f-90e9-c503c59d9ce1
+	fromColumn: PerdaMotivo.ProgramaKey
+	toColumn: Programa.ProgramaKey
+
+relationship 462815c5-0f3d-5b42-9979-d34543533a6b
+	fromColumn: PerdaMotivo.ComponenteKey
+	toColumn: Componente.ComponenteKey
+
+relationship e9e75e60-9f48-5c6b-a31b-fbdbe8857a86
+	fromColumn: PerdaMotivo.DataKey
+	toColumn: Calendario.DataKey
+
+relationship 316e2d65-6b3b-5af9-baa8-8fff34d082e7
+	fromColumn: PerdaMotivo.HoraKey
+	toColumn: Hora.HoraKey
+
+relationship 49c62246-7b82-5a93-a910-cdabd41857e7
+	fromColumn: TempoMaquina.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship 8a8f94b1-ae77-523d-891b-74713cb12121
+	fromColumn: TempoMaquina.DataKey
+	toColumn: Calendario.DataKey
+
+relationship a7cef53e-961f-5c46-b054-00812761162f
+	fromColumn: TempoMaquina.HoraKey
+	toColumn: Hora.HoraKey
+
+relationship 3ca8bf07-af8f-5b01-bcde-8e7a6f73a829
+	fromColumn: TrocaPrograma.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship e6ccc000-4efd-5958-915d-9a2ca0ec8252
+	fromColumn: TrocaPrograma.DataKey
+	toColumn: Calendario.DataKey
+
+relationship 1a24750d-9beb-5077-b052-b49900952096
+	fromColumn: TrocaPrograma.HoraKey
+	toColumn: Hora.HoraKey
+
+relationship 5a0d6960-0c5c-5959-a7b1-c0fcf40cd537
+	fromColumn: Evento.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship b1bc6756-586d-5212-9b7d-b7fe774dcd71
+	fromColumn: Evento.DataKey
+	toColumn: Calendario.DataKey
+
+relationship 8c26c502-436e-5564-9cb0-cba08305e74f
+	fromColumn: Evento.HoraKey
+	toColumn: Hora.HoraKey
+
+relationship f9041902-fe44-593d-9519-c050efe8a61d
+	fromColumn: StatusAtual.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship b7ce8d79-d811-5e0e-89ab-8c70caff8454
+	fromColumn: FalhaMaquina.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship a9397136-388c-51c8-b048-028147df6360
+	fromColumn: FalhaMaquina.ProgramaKey
+	toColumn: Programa.ProgramaKey
+
+relationship f947b251-735b-5f89-990d-82012615fb8a
+	fromColumn: FalhaMaquina.DataKey
+	toColumn: Calendario.DataKey
+
+relationship d6d8f5f0-8e22-5767-8a86-531733bd8870
+	fromColumn: FalhaMaquina.HoraKey
+	toColumn: Hora.HoraKey
+
+relationship fb64556b-99d8-5214-831a-94273aed3491
+	fromColumn: CicloIdeal.MaquinaKey
+	toColumn: Maquina.MaquinaKey
+
+relationship 2ee903ef-6a82-5f54-8d85-c213d910b660
+	fromColumn: CicloIdeal.ProgramaKey
+	toColumn: Programa.ProgramaKey
+

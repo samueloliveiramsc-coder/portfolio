@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Metronome_Abastecimento"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "c583dd4e-c800-4c6b-8587-f698b44a798b"
+  }
+}

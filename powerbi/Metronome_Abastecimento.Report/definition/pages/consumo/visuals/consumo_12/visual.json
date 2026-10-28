@@ -1,0 +1,348 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "consumo_12",
+  "position": {
+    "x": 248,
+    "y": 635,
+    "z": 21000,
+    "height": 437,
+    "width": 965.99999999999989,
+    "tabOrder": 21000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Componente"
+                    }
+                  },
+                  "Property": "Componente"
+                }
+              },
+              "queryRef": "Componente.Componente",
+              "nativeQueryRef": "Componente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Componente"
+                    }
+                  },
+                  "Property": "NomeComponente"
+                }
+              },
+              "queryRef": "Componente.NomeComponente",
+              "nativeQueryRef": "NomeComponente"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Componente"
+                    }
+                  },
+                  "Property": "TipoComponente"
+                }
+              },
+              "queryRef": "Componente.TipoComponente",
+              "nativeQueryRef": "TipoComponente"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Consumo"
+                    }
+                  },
+                  "Property": "Consumo (peças)"
+                }
+              },
+              "queryRef": "Consumo.Consumo (peças)",
+              "nativeQueryRef": "Consumo (peças)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Consumo"
+                    }
+                  },
+                  "Property": "Bobinas Esgotadas"
+                }
+              },
+              "queryRef": "Consumo.Bobinas Esgotadas",
+              "nativeQueryRef": "Bobinas Esgotadas"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Consumo"
+                  }
+                },
+                "Property": "Consumo (peças)"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "total": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "10D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E3E6EA'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "6D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Componentes mais consumidos'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "16D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2A37'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "ed33dee6cc791fc4b211",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Componente"
+              }
+            },
+            "Property": "Componente"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "0a23094e3451b0ada472",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Componente"
+              }
+            },
+            "Property": "NomeComponente"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "5a95e1f713da5299aaab",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Componente"
+              }
+            },
+            "Property": "TipoComponente"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "003b7471fc19bd161277",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Consumo"
+              }
+            },
+            "Property": "Consumo (peças)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "dd2283767ae613296146",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Consumo"
+              }
+            },
+            "Property": "Bobinas Esgotadas"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

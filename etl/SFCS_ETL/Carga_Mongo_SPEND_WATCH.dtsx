@@ -1,0 +1,1251 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="10/23/2026 4:47:51 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="JAPOKA"
+  DTS:CreatorName="JAPOKA\samueloliveira"
+  DTS:Description="Extrai SPEND e WATCH do MongoDB (ZappySys, RAW JSON) para stg.MongoDocumento e processa o modelo dw no SQL Server."
+  DTS:DTSID="{3B850D24-B173-46E3-BEE6-08BC0E3BCDA9}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.5"
+  DTS:LocaleID="1046"
+  DTS:ObjectName="Carga_Mongo_SPEND_WATCH"
+  DTS:ProtectionLevel="0"
+  DTS:VersionGUID="{A282D025-1C74-4B0F-AD51-AD07893F2FD9}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[MongoDB_SFCS]"
+      DTS:CreationName="ZS-MONGODB"
+      DTS:Description="ZappySys MongoDB - replica set rs0"
+      DTS:DTSID="{6355A9FA-D827-4EB3-B2E1-8CCF5ECD6D2F}"
+      DTS:ObjectName="MongoDB_SFCS">
+      <DTS:PropertyExpression
+        DTS:Name="Database">@[$Project::MongoDatabase]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Host">@[$Project::MongoHost]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="Options">@[$Project::MongoOpcoes]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <ConnectionManager
+          ConnectionString="Host=host.docker.internal:27027,host.docker.internal:27028,host.docker.internal:27029;Database=thread_05;UserName=;Timeout=60;Options=replicaSet=rs0;UseClientCertificate=False;CertificatePath=;CheckCertificateRevocation=True;AllowInvalidCertificate=False;CursorOptions=;ReadConcern=Default;ConnectionStringFile=;RetainSameConnection=False"
+          Timeout="60"
+          RetryInterval="10"
+          MaxRetryOnError="3"
+          MaxParallelThreads="8"
+          ProgressUpdateInterval="4096" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[SQL_SFCS_DW]"
+      DTS:CreationName="OLEDB"
+      DTS:Description="SQL Server de destino (MSOLEDBSQL, autenticação Windows)"
+      DTS:DTSID="{76513A7C-8D88-4B60-BD18-563B1BCE7C07}"
+      DTS:ObjectName="SQL_SFCS_DW">
+      <DTS:PropertyExpression
+        DTS:Name="InitialCatalog">@[$Project::SqlBanco]</DTS:PropertyExpression>
+      <DTS:PropertyExpression
+        DTS:Name="ServerName">@[$Project::SqlServidor]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=localhost;Initial Catalog=SFCS_DW;Provider=MSOLEDBSQL.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{F3D067F1-F927-4D94-9458-2CEA9760EDEC}"
+      DTS:IncludeInDebugDump="6789"
+      DTS:Namespace="User"
+      DTS:ObjectName="CargaId">
+      <DTS:VariableValue
+        DTS:DataType="3">0</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{406800FF-9AB7-49E5-99CB-F09E240B2A8E}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="FiltroDesdeUtc">
+      <DTS:VariableValue
+        DTS:DataType="8">1970-01-01T00:00:00.000Z</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\DFT - Extrair SPEND"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Coleção SPEND inteira (última leitura e última falha de cada máquina)."
+      DTS:DTSID="{3B421319-ECB2-4E69-B6C2-E692F0B9697B}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="DFT - Extrair SPEND"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\DFT - Extrair SPEND\DER - Metadados da carga"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Coluna Derivada;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;0"
+              description="Cria novos valores de coluna aplicando expressões a colunas de entrada da transformação. Crie novas colunas ou substitua as existentes. Por exemplo, concatene os valores das colunas 'first name' e 'last name' para formar uma coluna 'full name'."
+              name="DER - Metadados da carga"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Inputs[Entrada de Coluna Derivada]"
+                  description="Entrada para a Transformação Coluna Derivada"
+                  name="Entrada de Coluna Derivada">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Coluna Derivada]"
+                  description="Saída Padrão da Transformação Coluna Derivada"
+                  exclusionGroup="1"
+                  name="Saída de Coluna Derivada"
+                  synchronousInputId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Inputs[Entrada de Coluna Derivada]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[CargaId]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Computação"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[CargaId]"
+                      name="CargaId"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão de Coluna Derivada"
+                          name="Expression">@[User::CargaId]</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão Amigável de Coluna Derivada"
+                          expressionType="Notify"
+                          name="FriendlyExpression">@[User::CargaId]</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[MongoDatabase]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Computação"
+                      errorRowDisposition="FailComponent"
+                      length="64"
+                      lineageId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[MongoDatabase]"
+                      name="MongoDatabase"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão de Coluna Derivada"
+                          name="Expression">(DT_WSTR,64)@[$Project::MongoDatabase]</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão Amigável de Coluna Derivada"
+                          expressionType="Notify"
+                          name="FriendlyExpression">(DT_WSTR,64)@[$Project::MongoDatabase]</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[Colecao]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Computação"
+                      errorRowDisposition="FailComponent"
+                      length="20"
+                      lineageId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[Colecao]"
+                      name="Colecao"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão de Coluna Derivada"
+                          name="Expression">(DT_STR,20,1252)"SPEND"</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão Amigável de Coluna Derivada"
+                          expressionType="Notify"
+                          name="FriendlyExpression">(DT_STR,20,1252)"SPEND"</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Erro de Coluna Derivada]"
+                  description="Saída de Erro da Transformação Coluna Derivada"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Saída de Erro de Coluna Derivada"
+                  synchronousInputId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Inputs[Entrada de Coluna Derivada]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Erro de Coluna Derivada].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Erro de Coluna Derivada].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Erro de Coluna Derivada].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Erro de Coluna Derivada].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="Destino OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;4"
+              description="Destino OLE DB"
+              name="OLE DB - stg MongoDocumento"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="O tempo em segundos antes que um comando expire. Zero indica uma expiração infinita."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowset">[stg].[MongoDocumento]</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica a variável que contém o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="O comando SQL a ser executado."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica a página de código de coluna a ser usada quando não há informações de página de código disponíveis a partir da fonte de dados."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forca o uso do valor da propriedade DefaultCodePage durante a descrição dos dados de caractere."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica o modo usado para acessar o banco de dados."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica se os valores fornecidos para colunas de identidade serão copiados no destino. Se false, os valores para colunas de identidade serão gerados automaticamente no destino. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica se as colunas que contêm null terão null inserido no destino. Se false, as colunas que contêm null terão seus valores padrão inseridos no destino. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica as opções a serem usadas com o carregamento rápido. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica quando confirmações são emitidas durante a inserção de dados. Um valor de 0 especifica que uma confirmação será emitida ao final da inserção de dados. Aplicável somente se o carregamento rápido estiver ativado."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[SQL_SFCS_DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[SQL_SFCS_DW]"
+                  description="A conexão de tempo de execução OLE DB usada para acessar o banco de dados."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB]"
+                  errorOrTruncationOperation="Inserir"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Entrada de Destino OLE DB">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].Columns[RAW_DOCUMENT]"
+                      cachedDataType="nText"
+                      cachedName="RAW_DOCUMENT"
+                      externalMetadataColumnId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[Documento]"
+                      lineageId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSourceOutput].Columns[RAW_DOCUMENT]" />
+                    <inputColumn
+                      refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].Columns[CargaId]"
+                      cachedDataType="i4"
+                      cachedName="CargaId"
+                      externalMetadataColumnId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[CargaId]"
+                      lineageId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[CargaId]" />
+                    <inputColumn
+                      refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].Columns[MongoDatabase]"
+                      cachedDataType="wstr"
+                      cachedLength="64"
+                      cachedName="MongoDatabase"
+                      externalMetadataColumnId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[MongoDatabase]"
+                      lineageId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[MongoDatabase]" />
+                    <inputColumn
+                      refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].Columns[Colecao]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="20"
+                      cachedName="Colecao"
+                      externalMetadataColumnId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[Colecao]"
+                      lineageId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[Colecao]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[StgId]"
+                      dataType="i8"
+                      name="StgId" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[CargaId]"
+                      dataType="i4"
+                      name="CargaId" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[MongoDatabase]"
+                      dataType="wstr"
+                      length="64"
+                      name="MongoDatabase" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[Colecao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="Colecao" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[Documento]"
+                      dataType="nText"
+                      name="Documento" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Outputs[Saída de Erro de Destino OLE DB]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Saída de Erro de Destino OLE DB"
+                  synchronousInputId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="MongoDB Source; ZappySys LLC (c) All Rights Reserved; SSIS PowerPack; http://www.zappysys.com/support"
+              description="The MongoDB source is used to read NoSQL data from MongoDB. NoSQL table has no strict schema and each row may contain different number of attributes unlike traditional RDBMS table."
+              name="ZS MongoDB Source - SPEND"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="LoggingMode determines how much information is logged during Package Execution. Set Logging mode to Debugging for maximum log."
+                  expressionType="Notify"
+                  name="LoggingMode"
+                  typeConverter="ZappySys.PowerPack.Common.LoggingMode">0</property>
+                <property
+                  dataType="System.Boolean"
+                  description="When you enable this property it will prefix timestamp before Log messages."
+                  expressionType="Notify"
+                  name="PrefixTimestamp">false</property>
+                <property
+                  dataType="System.Null"
+                  expressionType="Notify"
+                  name="SelfRef"
+                  typeConverter="NOTBROWSABLE" />
+                <property
+                  dataType="System.String"
+                  description="Table name from where you want to read data"
+                  expressionType="Notify"
+                  name="TableName"
+                  typeConverter="ZappySys.PowerPack.Converters.TableEditor,ZappySys.PowerPack150.UI,Version=1.0.0.0,Culture=neutral,PublicKeyToken=1903265a93eae502">SPEND</property>
+                <property
+                  dataType="System.Int32"
+                  description="Indicates how many records are process in a single request. Setting this value to 0 will extract all records in single request."
+                  expressionType="Notify"
+                  name="BatchSize">1000</property>
+                <property
+                  dataType="System.Int32"
+                  description="Indicates Access Mode of data (e.g. Table or Sql Query)"
+                  expressionType="Notify"
+                  name="AccessMode"
+                  typeConverter="ZappySys.PowerPack.Common.DataAccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies SQL query to access data. This setting is ignored when access mode is set to Table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how you want to output columns. If you select RAW JSON Document mode then only single document will output for each record in DT_NTEXT datatype"
+                  expressionType="Notify"
+                  name="OutputMode"
+                  typeConverter="ZappySys.Common.Util.JsonColumnOutputMode">10</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indent JSON output so its easy to read."
+                  expressionType="Notify"
+                  name="IndentOutput">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies how custom date formatted strings are parsed when reading JSON."
+                  expressionType="Notify"
+                  name="DateFormatString"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how date formatted strings, e.g. Date(1198908717056) and 2012-03-21T05:40Z, are parsed when reading JSON."
+                  expressionType="Notify"
+                  name="DateParseHandling"
+                  typeConverter="ZappySys.Common.DateParseHandling">1</property>
+                <property
+                  dataType="System.Boolean"
+                  description="This option allows you to extract array content and sub documents of array."
+                  expressionType="Notify"
+                  name="EnableJsonPath">false</property>
+                <property
+                  dataType="System.String"
+                  description="Enter expression here to filter data.(Example:  $.Users[*].UserName ) This will fetch User names from users records"
+                  expressionType="Notify"
+                  name="Filter"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Boolean"
+                  description="Use this option to include parent properties (Non array) in the output along with Filtered Rows"
+                  expressionType="Notify"
+                  name="IncludeParentColumns">true</property>
+                <property
+                  dataType="System.Boolean"
+                  description="By default child and parent information is not included in the output if children not found for specified expression. For example if you want to extract all orders from all customers nodes then you can type $.Customers[*].Orders[*]. This will fetch all orders from all customers. By default customers records without orders wont be included in the output. If you want to include those customers where orders not found then check this option (Output null information for order attributes). This behavior is similar to LEFT OUTER JOIN in SQL (Left side is parent, right side is child). This option is ***resource intensive*** so only check if you really care about this behavior."
+                  expressionType="Notify"
+                  name="IncludeParentColumnsWhenChildMissing">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Set this option to true if you want to output parent columns which are array. By default any parent column which is an array is not included in output. See also FilterForParentColumnsWithArrayType property if you set this property"
+                  expressionType="Notify"
+                  name="IncludeParentColumnsWithArrayType">false</property>
+                <property
+                  dataType="System.String"
+                  description="Filter expression to extract value form parent"
+                  expressionType="Notify"
+                  name="FilterForParentColumnsWithArrayType"></property>
+                <property
+                  dataType="System.String"
+                  description="Prefix for parent column name. This option is only valid if you have set IncludeParentColumns=True"
+                  expressionType="Notify"
+                  name="ParentColumnPrefix">P_</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Throw error if property name specified in filter expression is missing. By default it will ignore any missing property errors."
+                  expressionType="Notify"
+                  name="ThrowErrorIfPropertyMissing">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="This property how many nested levels should be scanned to fetch various properties. 0=Scan all child levels."
+                  expressionType="Notify"
+                  name="MaxLevelsToScan">0</property>
+                <property
+                  dataType="System.String"
+                  description="List comma separated property names from JSON document which you want to exclude from output. Specify parent property name to exclude all child nodes."
+                  expressionType="Notify"
+                  name="ExcludedProperties"></property>
+                <property
+                  dataType="System.String"
+                  description="Property level separator used in generated property name (separator for outer properties - Above selected filter node). Use this if default separator is producing duplicate property name which is conflicting with existing name."
+                  expressionType="Notify"
+                  name="LevelSeparator">_</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Enables deep array flattening for selected filtered hierarchy. When you turn on this property it will flatten each property of each array item and expose as column (e.g. If you have Filter set as $.customers[*] and for each customer you have an array of Addresses then you may see output columns like Addresses.1.City, Addresses.1.State, Addresses.2.City, Addresses.2.State .... Addresses.N.City, Addresses.N.State). You can control how many array items you want to flatten by setting MaxArrayItemsToFlatten property."
+                  expressionType="Notify"
+                  name="EnableArrayFlattening">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum number of array items to flatten. inner array flattening. Adjust this property to control how many columns being generated. This option is ignored if you set EnableArrayFlattening=false"
+                  expressionType="Notify"
+                  name="MaxArrayItemsToFlatten">10</property>
+                <property
+                  dataType="System.Int32"
+                  description="Metadata scan mode controls how data type and length is determined. By default few records scanned to determine datatype/length. Changing ScanMode affects length/datatype accuracy."
+                  expressionType="Notify"
+                  name="MetaDataScanMode"
+                  typeConverter="ZappySys.Common.Data.MetaDataScanMode">4</property>
+                <property
+                  dataType="System.Int32"
+                  description="Length for all string column. This option is only valid for MetaDataScanMode=Custom"
+                  expressionType="Notify"
+                  name="MetaDataCustomLength">1000</property>
+                <property
+                  dataType="System.Boolean"
+                  description="When this option is true, it detects all string values as DT_STR (Ascii) rather than DT_WSTR (Unicode)"
+                  expressionType="Notify"
+                  name="MetaDataTreatStringAsAscii">false</property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">ZappySys.MongoDBSource</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Connections[ZS-MONGODB]"
+                  connectionManagerID="Package.ConnectionManagers[MongoDB_SFCS]"
+                  connectionManagerRefId="Package.ConnectionManagers[MongoDB_SFCS]"
+                  description="Select Runtime Connection Type ZS-MONGODB for this component"
+                  name="ZS-MONGODB" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSourceOutput]"
+                  errorOrTruncationOperation="Error"
+                  errorRowDisposition="FailComponent"
+                  name="MongoDBSourceOutput"
+                  truncationRowDisposition="FailComponent">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSourceOutput].Columns[RAW_DOCUMENT]"
+                      dataType="nText"
+                      externalMetadataColumnId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSourceOutput].ExternalColumns[RAW_DOCUMENT]"
+                      lineageId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSourceOutput].Columns[RAW_DOCUMENT]"
+                      name="RAW_DOCUMENT" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSourceOutput].ExternalColumns[RAW_DOCUMENT]"
+                      dataType="nText"
+                      name="RAW_DOCUMENT" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSource Error Output]"
+                  isErrorOut="true"
+                  name="MongoDBSource Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSource Error Output].Columns[RAW_DOCUMENT]"
+                      dataType="nText"
+                      lineageId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSource Error Output].Columns[RAW_DOCUMENT]"
+                      name="RAW_DOCUMENT" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSource Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSource Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSource Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSource Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSource Error Output].Columns[ErrorColumnName]"
+                      codePage="65001"
+                      dataType="str"
+                      length="128"
+                      lineageId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSource Error Output].Columns[ErrorColumnName]"
+                      name="ErrorColumnName" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSource Error Output].Columns[ErrorMessage]"
+                      dataType="wstr"
+                      length="4000"
+                      lineageId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSource Error Output].Columns[ErrorMessage]"
+                      name="ErrorMessage" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\DFT - Extrair SPEND.Paths[MongoDBSourceOutput]"
+              endId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Inputs[Entrada de Coluna Derivada]"
+              name="MongoDBSourceOutput"
+              startId="Package\DFT - Extrair SPEND\ZS MongoDB Source - SPEND.Outputs[MongoDBSourceOutput]" />
+            <path
+              refId="Package\DFT - Extrair SPEND.Paths[Saída de Coluna Derivada]"
+              endId="Package\DFT - Extrair SPEND\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB]"
+              name="Saída de Coluna Derivada"
+              startId="Package\DFT - Extrair SPEND\DER - Metadados da carga.Outputs[Saída de Coluna Derivada]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\DFT - Extrair WATCH"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Histórico do WATCH (SPEND a cada ~2 min, AUDIT, agenda e falhas) desde o filtro incremental."
+      DTS:DTSID="{788AEDBB-BA90-4E2A-8DF6-A51A79541B16}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="DFT - Extrair WATCH"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\DFT - Extrair WATCH\DER - Metadados da carga"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Coluna Derivada;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;0"
+              description="Cria novos valores de coluna aplicando expressões a colunas de entrada da transformação. Crie novas colunas ou substitua as existentes. Por exemplo, concatene os valores das colunas 'first name' e 'last name' para formar uma coluna 'full name'."
+              name="DER - Metadados da carga"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Inputs[Entrada de Coluna Derivada]"
+                  description="Entrada para a Transformação Coluna Derivada"
+                  name="Entrada de Coluna Derivada">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Coluna Derivada]"
+                  description="Saída Padrão da Transformação Coluna Derivada"
+                  exclusionGroup="1"
+                  name="Saída de Coluna Derivada"
+                  synchronousInputId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Inputs[Entrada de Coluna Derivada]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[CargaId]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Computação"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[CargaId]"
+                      name="CargaId"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão de Coluna Derivada"
+                          name="Expression">@[User::CargaId]</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão Amigável de Coluna Derivada"
+                          expressionType="Notify"
+                          name="FriendlyExpression">@[User::CargaId]</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[MongoDatabase]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Computação"
+                      errorRowDisposition="FailComponent"
+                      length="64"
+                      lineageId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[MongoDatabase]"
+                      name="MongoDatabase"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão de Coluna Derivada"
+                          name="Expression">(DT_WSTR,64)@[$Project::MongoDatabase]</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão Amigável de Coluna Derivada"
+                          expressionType="Notify"
+                          name="FriendlyExpression">(DT_WSTR,64)@[$Project::MongoDatabase]</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[Colecao]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Computação"
+                      errorRowDisposition="FailComponent"
+                      length="20"
+                      lineageId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[Colecao]"
+                      name="Colecao"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão de Coluna Derivada"
+                          name="Expression">(DT_STR,20,1252)"WATCH"</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Expressão Amigável de Coluna Derivada"
+                          expressionType="Notify"
+                          name="FriendlyExpression">(DT_STR,20,1252)"WATCH"</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Erro de Coluna Derivada]"
+                  description="Saída de Erro da Transformação Coluna Derivada"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Saída de Erro de Coluna Derivada"
+                  synchronousInputId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Inputs[Entrada de Coluna Derivada]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Erro de Coluna Derivada].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Erro de Coluna Derivada].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Erro de Coluna Derivada].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Erro de Coluna Derivada].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="Destino OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;4"
+              description="Destino OLE DB"
+              name="OLE DB - stg MongoDocumento"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="O tempo em segundos antes que um comando expire. Zero indica uma expiração infinita."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowset">[stg].[MongoDocumento]</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica a variável que contém o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="O comando SQL a ser executado."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica a página de código de coluna a ser usada quando não há informações de página de código disponíveis a partir da fonte de dados."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forca o uso do valor da propriedade DefaultCodePage durante a descrição dos dados de caractere."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica o modo usado para acessar o banco de dados."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica se os valores fornecidos para colunas de identidade serão copiados no destino. Se false, os valores para colunas de identidade serão gerados automaticamente no destino. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica se as colunas que contêm null terão null inserido no destino. Se false, as colunas que contêm null terão seus valores padrão inseridos no destino. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica as opções a serem usadas com o carregamento rápido. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica quando confirmações são emitidas durante a inserção de dados. Um valor de 0 especifica que uma confirmação será emitida ao final da inserção de dados. Aplicável somente se o carregamento rápido estiver ativado."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[SQL_SFCS_DW]"
+                  connectionManagerRefId="Package.ConnectionManagers[SQL_SFCS_DW]"
+                  description="A conexão de tempo de execução OLE DB usada para acessar o banco de dados."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB]"
+                  errorOrTruncationOperation="Inserir"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Entrada de Destino OLE DB">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].Columns[RAW_DOCUMENT]"
+                      cachedDataType="nText"
+                      cachedName="RAW_DOCUMENT"
+                      externalMetadataColumnId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[Documento]"
+                      lineageId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSourceOutput].Columns[RAW_DOCUMENT]" />
+                    <inputColumn
+                      refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].Columns[CargaId]"
+                      cachedDataType="i4"
+                      cachedName="CargaId"
+                      externalMetadataColumnId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[CargaId]"
+                      lineageId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[CargaId]" />
+                    <inputColumn
+                      refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].Columns[MongoDatabase]"
+                      cachedDataType="wstr"
+                      cachedLength="64"
+                      cachedName="MongoDatabase"
+                      externalMetadataColumnId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[MongoDatabase]"
+                      lineageId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[MongoDatabase]" />
+                    <inputColumn
+                      refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].Columns[Colecao]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="20"
+                      cachedName="Colecao"
+                      externalMetadataColumnId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[Colecao]"
+                      lineageId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Coluna Derivada].Columns[Colecao]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[StgId]"
+                      dataType="i8"
+                      name="StgId" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[CargaId]"
+                      dataType="i4"
+                      name="CargaId" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[MongoDatabase]"
+                      dataType="wstr"
+                      length="64"
+                      name="MongoDatabase" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[Colecao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="Colecao" />
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB].ExternalColumns[Documento]"
+                      dataType="nText"
+                      name="Documento" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Outputs[Saída de Erro de Destino OLE DB]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Saída de Erro de Destino OLE DB"
+                  synchronousInputId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH"
+              componentClassID="Microsoft.ManagedComponentHost"
+              contactInfo="MongoDB Source; ZappySys LLC (c) All Rights Reserved; SSIS PowerPack; http://www.zappysys.com/support"
+              description="The MongoDB source is used to read NoSQL data from MongoDB. NoSQL table has no strict schema and each row may contain different number of attributes unlike traditional RDBMS table."
+              name="ZS MongoDB Source - WATCH"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="LoggingMode determines how much information is logged during Package Execution. Set Logging mode to Debugging for maximum log."
+                  expressionType="Notify"
+                  name="LoggingMode"
+                  typeConverter="ZappySys.PowerPack.Common.LoggingMode">0</property>
+                <property
+                  dataType="System.Boolean"
+                  description="When you enable this property it will prefix timestamp before Log messages."
+                  expressionType="Notify"
+                  name="PrefixTimestamp">false</property>
+                <property
+                  dataType="System.Null"
+                  expressionType="Notify"
+                  name="SelfRef"
+                  typeConverter="NOTBROWSABLE" />
+                <property
+                  dataType="System.String"
+                  description="Table name from where you want to read data"
+                  expressionType="Notify"
+                  name="TableName"
+                  typeConverter="ZappySys.PowerPack.Converters.TableEditor,ZappySys.PowerPack150.UI,Version=1.0.0.0,Culture=neutral,PublicKeyToken=1903265a93eae502"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Indicates how many records are process in a single request. Setting this value to 0 will extract all records in single request."
+                  expressionType="Notify"
+                  name="BatchSize">1000</property>
+                <property
+                  dataType="System.Int32"
+                  description="Indicates Access Mode of data (e.g. Table or Sql Query)"
+                  expressionType="Notify"
+                  name="AccessMode"
+                  typeConverter="ZappySys.PowerPack.Common.DataAccessMode">1</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies SQL query to access data. This setting is ignored when access mode is set to Table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">{Table:WATCH}
+{update:{$gt:new ISODate("{{User::FiltroDesdeUtc}}")},$or:[{type:{$ne:"PICKED"}},{success:false}]}</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how you want to output columns. If you select RAW JSON Document mode then only single document will output for each record in DT_NTEXT datatype"
+                  expressionType="Notify"
+                  name="OutputMode"
+                  typeConverter="ZappySys.Common.Util.JsonColumnOutputMode">10</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indent JSON output so its easy to read."
+                  expressionType="Notify"
+                  name="IndentOutput">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies how custom date formatted strings are parsed when reading JSON."
+                  expressionType="Notify"
+                  name="DateFormatString"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how date formatted strings, e.g. Date(1198908717056) and 2012-03-21T05:40Z, are parsed when reading JSON."
+                  expressionType="Notify"
+                  name="DateParseHandling"
+                  typeConverter="ZappySys.Common.DateParseHandling">1</property>
+                <property
+                  dataType="System.Boolean"
+                  description="This option allows you to extract array content and sub documents of array."
+                  expressionType="Notify"
+                  name="EnableJsonPath">false</property>
+                <property
+                  dataType="System.String"
+                  description="Enter expression here to filter data.(Example:  $.Users[*].UserName ) This will fetch User names from users records"
+                  expressionType="Notify"
+                  name="Filter"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                <property
+                  dataType="System.Boolean"
+                  description="Use this option to include parent properties (Non array) in the output along with Filtered Rows"
+                  expressionType="Notify"
+                  name="IncludeParentColumns">true</property>
+                <property
+                  dataType="System.Boolean"
+                  description="By default child and parent information is not included in the output if children not found for specified expression. For example if you want to extract all orders from all customers nodes then you can type $.Customers[*].Orders[*]. This will fetch all orders from all customers. By default customers records without orders wont be included in the output. If you want to include those customers where orders not found then check this option (Output null information for order attributes). This behavior is similar to LEFT OUTER JOIN in SQL (Left side is parent, right side is child). This option is ***resource intensive*** so only check if you really care about this behavior."
+                  expressionType="Notify"
+                  name="IncludeParentColumnsWhenChildMissing">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Set this option to true if you want to output parent columns which are array. By default any parent column which is an array is not included in output. See also FilterForParentColumnsWithArrayType property if you set this property"
+                  expressionType="Notify"
+                  name="IncludeParentColumnsWithArrayType">false</property>
+                <property
+                  dataType="System.String"
+                  description="Filter expression to extract value form parent"
+                  expressionType="Notify"
+                  name="FilterForParentColumnsWithArrayType"></property>
+                <property
+                  dataType="System.String"
+                  description="Prefix for parent column name. This option is only valid if you have set IncludeParentColumns=True"
+                  expressionType="Notify"
+                  name="ParentColumnPrefix">P_</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Throw error if property name specified in filter expression is missing. By default it will ignore any missing property errors."
+                  expressionType="Notify"
+                  name="ThrowErrorIfPropertyMissing">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="This property how many nested levels should be scanned to fetch various properties. 0=Scan all child levels."
+                  expressionType="Notify"
+                  name="MaxLevelsToScan">0</property>
+                <property
+                  dataType="System.String"
+                  description="List comma separated property names from JSON document which you want to exclude from output. Specify parent property name to exclude all child nodes."
+                  expressionType="Notify"
+                  name="ExcludedProperties"></property>
+                <property
+                  dataType="System.String"
+                  description="Property level separator used in generated property name (separator for outer properties - Above selected filter node). Use this if default separator is producing duplicate property name which is conflicting with existing name."
+                  expressionType="Notify"
+                  name="LevelSeparator">_</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Enables deep array flattening for selected filtered hierarchy. When you turn on this property it will flatten each property of each array item and expose as column (e.g. If you have Filter set as $.customers[*] and for each customer you have an array of Addresses then you may see output columns like Addresses.1.City, Addresses.1.State, Addresses.2.City, Addresses.2.State .... Addresses.N.City, Addresses.N.State). You can control how many array items you want to flatten by setting MaxArrayItemsToFlatten property."
+                  expressionType="Notify"
+                  name="EnableArrayFlattening">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum number of array items to flatten. inner array flattening. Adjust this property to control how many columns being generated. This option is ignored if you set EnableArrayFlattening=false"
+                  expressionType="Notify"
+                  name="MaxArrayItemsToFlatten">10</property>
+                <property
+                  dataType="System.Int32"
+                  description="Metadata scan mode controls how data type and length is determined. By default few records scanned to determine datatype/length. Changing ScanMode affects length/datatype accuracy."
+                  expressionType="Notify"
+                  name="MetaDataScanMode"
+                  typeConverter="ZappySys.Common.Data.MetaDataScanMode">4</property>
+                <property
+                  dataType="System.Int32"
+                  description="Length for all string column. This option is only valid for MetaDataScanMode=Custom"
+                  expressionType="Notify"
+                  name="MetaDataCustomLength">1000</property>
+                <property
+                  dataType="System.Boolean"
+                  description="When this option is true, it detects all string values as DT_STR (Ascii) rather than DT_WSTR (Unicode)"
+                  expressionType="Notify"
+                  name="MetaDataTreatStringAsAscii">false</property>
+                <property
+                  dataType="System.String"
+                  name="UserComponentTypeName">ZappySys.MongoDBSource</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Connections[ZS-MONGODB]"
+                  connectionManagerID="Package.ConnectionManagers[MongoDB_SFCS]"
+                  connectionManagerRefId="Package.ConnectionManagers[MongoDB_SFCS]"
+                  description="Select Runtime Connection Type ZS-MONGODB for this component"
+                  name="ZS-MONGODB" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSourceOutput]"
+                  errorOrTruncationOperation="Error"
+                  errorRowDisposition="FailComponent"
+                  name="MongoDBSourceOutput"
+                  truncationRowDisposition="FailComponent">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSourceOutput].Columns[RAW_DOCUMENT]"
+                      dataType="nText"
+                      externalMetadataColumnId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSourceOutput].ExternalColumns[RAW_DOCUMENT]"
+                      lineageId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSourceOutput].Columns[RAW_DOCUMENT]"
+                      name="RAW_DOCUMENT" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSourceOutput].ExternalColumns[RAW_DOCUMENT]"
+                      dataType="nText"
+                      name="RAW_DOCUMENT" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSource Error Output]"
+                  isErrorOut="true"
+                  name="MongoDBSource Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSource Error Output].Columns[RAW_DOCUMENT]"
+                      dataType="nText"
+                      lineageId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSource Error Output].Columns[RAW_DOCUMENT]"
+                      name="RAW_DOCUMENT" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSource Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSource Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSource Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSource Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSource Error Output].Columns[ErrorColumnName]"
+                      codePage="65001"
+                      dataType="str"
+                      length="128"
+                      lineageId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSource Error Output].Columns[ErrorColumnName]"
+                      name="ErrorColumnName" />
+                    <outputColumn
+                      refId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSource Error Output].Columns[ErrorMessage]"
+                      dataType="wstr"
+                      length="4000"
+                      lineageId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSource Error Output].Columns[ErrorMessage]"
+                      name="ErrorMessage" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\DFT - Extrair WATCH.Paths[MongoDBSourceOutput]"
+              endId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Inputs[Entrada de Coluna Derivada]"
+              name="MongoDBSourceOutput"
+              startId="Package\DFT - Extrair WATCH\ZS MongoDB Source - WATCH.Outputs[MongoDBSourceOutput]" />
+            <path
+              refId="Package\DFT - Extrair WATCH.Paths[Saída de Coluna Derivada]"
+              endId="Package\DFT - Extrair WATCH\OLE DB - stg MongoDocumento.Inputs[Entrada de Destino OLE DB]"
+              name="Saída de Coluna Derivada"
+              startId="Package\DFT - Extrair WATCH\DER - Metadados da carga.Outputs[Saída de Coluna Derivada]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\SQL - Iniciar carga"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Abre a carga em etl.Carga, limpa a staging e devolve CargaId e o filtro incremental."
+      DTS:DTSID="{DB7C5DA7-1D63-4060-B9F0-0DE0508D708A}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="SQL - Iniciar carga"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:PropertyExpression
+        DTS:Name="SqlStatementSource">"EXEC etl.usp_IniciarCarga @MongoDatabase = N'" + @[$Project::MongoDatabase] + "'"</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{76513A7C-8D88-4B60-BD18-563B1BCE7C07}"
+          SQLTask:SqlStatementSource="EXEC etl.usp_IniciarCarga @MongoDatabase = N'thread_05'"
+          SQLTask:ResultType="ResultSetType_SingleRow" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="CargaId"
+            SQLTask:DtsVariableName="User::CargaId" />
+          <SQLTask:ResultBinding
+            SQLTask:ResultName="FiltroDesdeUtc"
+            SQLTask:DtsVariableName="User::FiltroDesdeUtc" />
+        </SQLTask:SqlTaskData>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\SQL - Processar carga"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Achata o JSON (OPENJSON), elimina repetidas, calcula diferenças e carrega dimensões e fatos."
+      DTS:DTSID="{B0937601-731D-4518-99F8-95008D5821D8}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="SQL - Processar carga"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:PropertyExpression
+        DTS:Name="SqlStatementSource">"EXEC etl.usp_ProcessarCarga @CargaId = " + (DT_WSTR, 12) @[User::CargaId]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{76513A7C-8D88-4B60-BD18-563B1BCE7C07}"
+          SQLTask:SqlStatementSource="EXEC etl.usp_ProcessarCarga @CargaId = 0" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[{0421A84C-0504-4C41-ADBC-3F3276CAEB3A\}]"
+      DTS:CreationName=""
+      DTS:DTSID="{0421A84C-0504-4C41-ADBC-3F3276CAEB3A}"
+      DTS:From="Package\SQL - Iniciar carga"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="{0421A84C-0504-4C41-ADBC-3F3276CAEB3A}"
+      DTS:To="Package\DFT - Extrair WATCH" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[{57D359C5-20E0-445A-9F02-A7A383586637\}]"
+      DTS:CreationName=""
+      DTS:DTSID="{57D359C5-20E0-445A-9F02-A7A383586637}"
+      DTS:From="Package\DFT - Extrair SPEND"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="{57D359C5-20E0-445A-9F02-A7A383586637}"
+      DTS:To="Package\SQL - Processar carga" />
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[{D0C617DC-A363-49BB-B39D-5FD73F40A611\}]"
+      DTS:CreationName=""
+      DTS:DTSID="{D0C617DC-A363-49BB-B39D-5FD73F40A611}"
+      DTS:From="Package\DFT - Extrair WATCH"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="{D0C617DC-A363-49BB-B39D-5FD73F40A611}"
+      DTS:To="Package\DFT - Extrair SPEND" />
+  </DTS:PrecedenceConstraints>
+  <DTS:EventHandlers>
+    <DTS:EventHandler
+      DTS:refId="Package.EventHandlers[OnError]"
+      DTS:CreationName="OnError"
+      DTS:DTSID="{48DF8168-5483-49D4-AEC9-F707A818E377}"
+      DTS:EventID="0"
+      DTS:EventName="OnError"
+      DTS:LocaleID="-1">
+      <DTS:Variables>
+        <DTS:Variable
+          DTS:CreationName=""
+          DTS:Description="A propriedade propagate do evento"
+          DTS:DTSID="{018691C5-99EE-4B92-8760-F64DCA34BB6B}"
+          DTS:IncludeInDebugDump="6789"
+          DTS:Namespace="System"
+          DTS:ObjectName="Propagate">
+          <DTS:VariableValue
+            DTS:DataType="11">-1</DTS:VariableValue>
+        </DTS:Variable>
+      </DTS:Variables>
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package.EventHandlers[OnError]\SQL - Registrar falha"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Marca a carga como FALHA em etl.Carga com a descrição do erro."
+          DTS:DTSID="{F8859369-1EF5-4CF0-B226-39688EB8C3AB}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="SQL - Registrar falha">
+          <DTS:Variables />
+          <DTS:PropertyExpression
+            DTS:Name="SqlStatementSource">"EXEC etl.usp_RegistrarFalha @CargaId = " + (DT_WSTR, 12) @[User::CargaId] + ", @Mensagem = N'" + REPLACE(SUBSTRING(@[System::SourceName] + ": " + @[System::ErrorDescription], 1, 3500), "'", "''") + "'"</DTS:PropertyExpression>
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{76513A7C-8D88-4B60-BD18-563B1BCE7C07}"
+              SQLTask:SqlStatementSource="EXEC etl.usp_RegistrarFalha @CargaId = 0, @Mensagem = N': '" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+    </DTS:EventHandler>
+  </DTS:EventHandlers>
+</DTS:Executable>

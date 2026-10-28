@@ -1,0 +1,56 @@
+table Componente
+	lineageTag: 6acf11fc-e4a0-503b-bba0-9fa115f8a8ff
+
+	column ComponenteKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 671207da-571a-534e-94c8-5f7ff5737e06
+		summarizeBy: none
+		sourceColumn: ComponenteKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column Componente
+		dataType: string
+		lineageTag: 38c0dc71-4f81-5081-8364-3eed59f84f5d
+		summarizeBy: none
+		sourceColumn: Componente
+
+		annotation SummarizationSetBy = Automatic
+
+	column NomeComponente
+		dataType: string
+		lineageTag: 41bf2e9c-ee97-5fa7-9734-da52022fa4f0
+		summarizeBy: none
+		sourceColumn: NomeComponente
+
+		annotation SummarizationSetBy = Automatic
+
+	column DescricaoComponente
+		dataType: string
+		lineageTag: e2608468-c59d-56a9-a81a-aba740a44f66
+		summarizeBy: none
+		sourceColumn: DescricaoComponente
+
+		annotation SummarizationSetBy = Automatic
+
+	column TipoComponente
+		dataType: string
+		lineageTag: cb70dcaf-1dd8-52ea-99e5-142b496c2305
+		summarizeBy: none
+		sourceColumn: TipoComponente
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Componente = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "Componente"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+

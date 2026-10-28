@@ -1,0 +1,58 @@
+/// Tipos de auditoria (AUDIT_TYPE). Resultado: Verificação (em processo), Bloqueio ou Registro.
+table TipoEvento
+	lineageTag: 011bdda9-cfd1-515e-8f42-9da2fe3a583f
+
+	column TipoCodigo
+		dataType: string
+		lineageTag: e3016b9a-1c66-5c16-b806-794d66f85927
+		summarizeBy: none
+		sourceColumn: TipoCodigo
+
+		annotation SummarizationSetBy = Automatic
+
+	column TipoEvento
+		dataType: string
+		lineageTag: 5dcc0623-cff2-5800-83b6-20bba79522cd
+		summarizeBy: none
+		sourceColumn: TipoEvento
+
+		annotation SummarizationSetBy = Automatic
+
+	column Categoria
+		dataType: string
+		lineageTag: 8072ce94-c0f1-5d3a-908a-33a8330080f1
+		summarizeBy: none
+		sourceColumn: Categoria
+		sortByColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	column Resultado
+		dataType: string
+		lineageTag: 041c731f-d69b-52dc-bab6-c972718eaae4
+		summarizeBy: none
+		sourceColumn: Resultado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ordem
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 87f8acfc-97cb-5870-b9f7-e18500f4c75f
+		summarizeBy: none
+		sourceColumn: Ordem
+
+		annotation SummarizationSetBy = Automatic
+
+	partition TipoEvento = m
+		mode: import
+		source =
+				let
+				    Fonte = Sql.Database(Servidor, Banco),
+				    Dados = Fonte{[Schema = "bi", Item = "TipoEvento"]}[Data]
+				in
+				    Dados
+
+	annotation PBI_ResultType = Table
+
